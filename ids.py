@@ -4,6 +4,17 @@ graph = {
 	3 : [5, 6],
 }
 
+def ids(start , end):
+    depth = 0
+    while True : 
+
+        result = dls (start ,end , depth)
+        if result == end :
+            return True
+        depth = depth + 1
+
+
+
 def dls(node , end , depth):
     print(node,depth)
 
@@ -15,3 +26,5 @@ def dls(node , end , depth):
            if test == end:
                 return end
 
+
+print(ids(1,6))
