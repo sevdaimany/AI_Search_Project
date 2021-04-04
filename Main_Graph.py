@@ -1,7 +1,12 @@
 
 import collections
 import io
-import Bidirectional_Search
+# import Bidirectional_Search
+import ids
+import json
+
+
+
 
 mygraph = collections.defaultdict(list)
 mynodes = list()
@@ -9,19 +14,19 @@ mynodes = list()
 
 
 myinput = """5	5
-2	2	2	2	2
+2	2	2	x	2
 2r	1	1	1	2
-2	1	1b	1	2
+2	x	1b	1	x
 2	1	x	1	2
-2	2	2p	2	2"""
+2	2	2p	2	x"""
 
 
 
-address = "test1.txt"
-with open(address) as reader :
-    # print(reader.read())
-    myinput = reader.read()
-# print(myinput)
+# address = "test1.txt"
+# with open(address) as reader :
+#     # print(reader.read())
+#     myinput = reader.read()
+# # print(myinput)
 
 
 buf = io.StringIO(myinput)
@@ -86,7 +91,17 @@ for i in range(n):
             mygraph[pos].append((str(i) + str(ii+1) , cc))
 
 
-# print(len(mygraph))
-
+# print(mygraph)
 # print(Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "42"))
+
+def get_json_result(results):
+    return json.dumps(results)
+
+def runIDS():    
+    q = ids.iterativeDeepening(mygraph , "10" , "42")
+    print(q)
+    return get_json_result({
+        "graph" : mygraph,
+        "path" : q,
+    });
 
