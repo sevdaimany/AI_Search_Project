@@ -142,6 +142,14 @@ function showResults(path){
     Body.setPosition(robot ,{x : (indexColumn + 0.5) * unitLengthX  ,y:(indexRow + 0.5) * unitLengthY} , {x: 0, y: 0.5});
     index ++;
   } , 1000);
-
-
 }
+
+
+async function run(){
+  let resultsJSON = await eel.runIDS()();
+  let result = JSON.parse(resultsJSON)
+  table (result["graph"]);
+  showResults(result["path"]);
+}
+
+run()
