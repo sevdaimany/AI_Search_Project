@@ -116,3 +116,14 @@ function table (graph) {
 
   }
 }
+
+
+function randomPic(){
+  let rand = Math.floor(Math.random() * 5)
+  if(rand === 0) return "./images/cake.png";
+  else if(rand === 1) return "./images/noodle.png";
+  else if(rand === 2) return "./images/noodles.png";
+  else if(rand === 3) return "./images/watermelon.png";
+  else if(rand === 4) return "./images/taco.png";
+
+}
