@@ -118,6 +118,7 @@ function table (graph) {
 }
 
 
+
 function randomPic(){
   let rand = Math.floor(Math.random() * 5)
   if(rand === 0) return "./images/cake.png";
@@ -125,5 +126,22 @@ function randomPic(){
   else if(rand === 2) return "./images/noodles.png";
   else if(rand === 3) return "./images/watermelon.png";
   else if(rand === 4) return "./images/taco.png";
+
+}
+
+
+function showResults(path){
+  let index = 0;
+  let id = setInterval(function(){
+    if(index === path.length -1){
+      clearInterval(id)
+    }
+    let key = path[index];
+    let indexRow = parseInt(key.charAt(0));
+    let indexColumn = parseInt(key.charAt(1));
+    Body.setPosition(robot ,{x : (indexColumn + 0.5) * unitLengthX  ,y:(indexRow + 0.5) * unitLengthY} , {x: 0, y: 0.5});
+    index ++;
+  } , 1000);
+
 
 }
