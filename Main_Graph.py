@@ -75,38 +75,39 @@ for i in range(n):
 
         if i > 0 and not mynodes[i-1][ii] == 'x' :
             cc = mynodes[i-1][ii]
-            cc = cc.replace('r',"").replace('b',"").replace('p',"")
-            # mygraph[pos].append((str(i-1) + str(ii) , cc))
+            # cc = cc.replace('r',"").replace('b',"").replace('p',"")
+            mygraph[pos].append((str(i-1) + str(ii) , cc))
             mygraph[pos].append(((i-1 , ii) , cc))
 
         if i < (n-1) and not mynodes[i+1][ii] == 'x' : 
             cc = mynodes[i+1][ii]
-            cc = cc.replace("r","").replace("b","").replace("p","")
-            # mygraph[pos].append((str(i+1) + str(ii) , cc))
+            # cc = cc.replace("r","").replace("b","").replace("p","")
+            mygraph[pos].append((str(i+1) + str(ii) , cc))
             mygraph[pos].append(((i+1 , ii) , cc))
 
         if ii > 0 and not mynodes[i][ii-1] == 'x' : 
             cc = mynodes[i][ii-1]
-            cc = cc.replace("r","").replace("b","").replace("p","")
-            # mygraph[pos].append((str(i) + str(ii-1) , cc))
+            # cc = cc.replace("r","").replace("b","").replace("p","")
+            mygraph[pos].append((str(i) + str(ii-1) , cc))
             mygraph[pos].append(((i , ii-1) , cc))
 
         if ii < (m-1) and not mynodes[i][ii+1] == 'x' : 
             cc = mynodes[i][ii+1]
-            cc = cc.replace("r","").replace("b","").replace("p","")
-            # mygraph[pos].append((str(i) + str(ii+1) , cc))
+            # cc = cc.replace("r","").replace("b","").replace("p","")
+            mygraph[pos].append((str(i) + str(ii+1) , cc))
             mygraph[pos].append(((i , ii+1) , cc))
 
 
 # print(mygraph)
 
-path = Bidirectional_Search.BidirectionalSearch(mygraph , (1 , 0) , (4 ,2))
-print(path)
+# path = Bidirectional_Search.BidirectionalSearch(mygraph , (1 , 0) , (4 ,2))
+# path = Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "42")
+# print(path)
 
-print("what a bummer!")
+# print("what a bummer!")
 
-path = Astar.a_star(mygraph , (1 , 0) , (4 ,2))
-print(path)
+# path = Astar.a_star(mygraph ,  "10" , "42")
+# print(path)
 
 
 def get_json_result(results):
@@ -119,6 +120,6 @@ def runIDS():
     return get_json_result({
         "graph" : mygraph,
         "path" : q,
-    });
+    })
 
 eel.start('index.html' ,size=(500,500))
