@@ -2,6 +2,11 @@
 import collections
 import io
 import Bidirectional_Search  , Astar
+import eel
+import json
+
+eel.init("frontend")
+
 
 mygraph = collections.defaultdict(list)
 mynodes = list()
@@ -102,3 +107,18 @@ print("what a bummer!")
 
 path = Astar.a_star(mygraph , (1 , 0) , (4 ,2))
 print(path)
+
+
+def get_json_result(results):
+    return json.dumps(results)
+
+@eel.expose
+def runIDS():    
+    q = ids.iterativeDeepening(mygraph , "10" , "42")
+    print(q)
+    return get_json_result({
+        "graph" : mygraph,
+        "path" : q,
+    });
+
+eel.start('index.html' ,size=(500,500))
