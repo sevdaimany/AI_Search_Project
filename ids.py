@@ -23,7 +23,7 @@ def depthLimited(graph , start,goal, depth, stack,  visited = None):
     for next in graph.get(start):
         if type(next) == tuple: 
             if not next[0] in visited:
-                reachGoal =depthLimited(graph , next[0] ,goal, depth-1,stack , visited)
+                reachGoal = depthLimited(graph , next[0] ,goal, depth-1,stack , visited)
                 if reachGoal:
                     return reachGoal
     depth +=1
