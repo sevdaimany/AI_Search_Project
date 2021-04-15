@@ -79,7 +79,7 @@ def a_star(mygraph, start, end):
         
             # Create the f, g, and h values
             child.g = current_node.g + child.c
-            child.h = abs((child.position[0] - end_node.position[0])) + abs((child.position[1] - end_node.position[1]))
+            child.h = abs((int(child.position[0]) - int(end_node.position[0]))) + abs((int(child.position[1]) - int(end_node.position[1])))
             child.f = child.g + child.h
 
             # Child is on the closed list

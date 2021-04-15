@@ -98,28 +98,28 @@ for i in range(n):
             # mygraph[pos].append(((i , ii+1) , cc))
 
 
-print(mygraph)
+# print(mygraph)
 
-# path = Bidirectional_Search.BidirectionalSearch(mygraph , (1 , 0) , (4 ,2))
-# path = Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "42")
-# print(path)
+path = Bidirectional_Search.BidirectionalSearch(mygraph , (1 , 0) , (4 ,2))
+path = Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "42")
+print(path)
 
-# print("what a bummer!")
+print("what a bummer!")
 
-# path = Astar.a_star(mygraph ,  "10" , "42")
-# print(path)
+path = Astar.a_star(mygraph ,  "10" , "42")
+print(path)
 
 
-def get_json_result(results):
-    return json.dumps(results)
+# def get_json_result(results):
+#     return json.dumps(results)
 
-@eel.expose
-def runIDS():    
-    q = ids.iterativeDeepening(mygraph , "10" , "42")
-    print(q)
-    return get_json_result({
-        "graph" : mygraph,
-        "path" : q,
-    })
+# @eel.expose
+# def runIDS():    
+#     q = ids.iterativeDeepening(mygraph , "10" , "42")
+#     print(q)
+#     return get_json_result({
+#         "graph" : mygraph,
+#         "path" : q,
+#     })
 
-eel.start('index.html' ,size=(500,500))
+# eel.start('index.html' ,size=(500,500))
