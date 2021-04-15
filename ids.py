@@ -1,32 +1,30 @@
-def iterativeDeepening(graph , startNode,goal):
+graph = {
+	1 : [2, 3],
+	2 : [4],
+	3 : [5, 6],
+}
+
+def ids(start , end):
     depth = 0
-    result = None
-    while result == None:
-        stack  = []
-        result = depthLimited(graph , startNode,goal ,depth , stack)
-        depth +=1
-    return result
-    
-def depthLimited(graph , start,goal, depth, stack,  visited = None):
-    stack.append(start)
+    while True : 
 
-    if start == goal:
-        print(stack)
-        return stack
-    elif depth == 0 :
-        stack.pop() 
-        return None 
-    
-    if visited is None:
-        visited = set()
-    visited.add(start)
-    for next in graph.get(start):
-        if type(next) == tuple: 
-            if not next[0] in visited:
-                reachGoal = depthLimited(graph , next[0] ,goal, depth-1,stack , visited)
-                if reachGoal:
-                    return reachGoal
-    depth +=1
-    stack.pop()
-                
+        result = dls (start ,end , depth)
+        if result == end :
+            return True
+        depth = depth + 1
 
+
+
+def dls(node , end , depth):
+    print(node,depth)
+
+    if depth == 0 and node== end:
+        return node
+    elif depth > 0:
+        for i in graph[node]:
+           test = dls(i , end , depth -1)
+           if test == end:
+                return end
+
+
+print(ids(1,6))

@@ -1,14 +1,7 @@
 
 import collections
 import io
-# import Bidirectional_Search
-import ids
-import eel
-import json
-
-eel.init("frontend")
-
-
+import Bidirectional_Search  , Astar
 
 mygraph = collections.defaultdict(list)
 mynodes = list()
@@ -16,19 +9,19 @@ mynodes = list()
 
 
 myinput = """5	5
-2	2	2	x	2
+2	2	2	2	2
 2r	1	1	1	2
-2	x	1b	1	x
+2	1	1b	1	2
 2	1	x	1	2
-2	2	2p	2	x"""
+2	2	2p	2	2"""
 
 
 
-# address = "test1.txt"
-# with open(address) as reader :
-#     # print(reader.read())
-#     myinput = reader.read()
-# # print(myinput)
+address = "test1.txt"
+with open(address) as reader :
+    # print(reader.read())
+    myinput = reader.read()
+# print(myinput)
 
 
 buf = io.StringIO(myinput)
@@ -51,7 +44,8 @@ for i in range(m):
       
 for i in range(n):
     for ii in range(m) :
-        pos = str(i) + str(ii)
+        # pos = str(i) + str(ii)
+        pos = (i , ii)
         
         kind = 'o'
         if mynodes[i][ii].count('r') > 0 :
@@ -68,44 +62,43 @@ for i in range(n):
             mygraph[pos].append(-1)
             continue
         elif not mygraph[pos][0] == 'o' :
-            mygraph[pos].append(mynodes[i][ii][:-1])
+            mygraph[pos].append(int(mynodes[i][ii][:-1]))
         else :
-            mygraph[pos].append(mynodes[i][ii])
+            mygraph[pos].append(int(mynodes[i][ii]))
+
+        # mygraph[pos].append(-1)
 
         if i > 0 and not mynodes[i-1][ii] == 'x' :
             cc = mynodes[i-1][ii]
             cc = cc.replace('r',"").replace('b',"").replace('p',"")
-            mygraph[pos].append((str(i-1) + str(ii) , cc))
+            # mygraph[pos].append((str(i-1) + str(ii) , cc))
+            mygraph[pos].append(((i-1 , ii) , cc))
 
         if i < (n-1) and not mynodes[i+1][ii] == 'x' : 
             cc = mynodes[i+1][ii]
             cc = cc.replace("r","").replace("b","").replace("p","")
-            mygraph[pos].append((str(i+1) + str(ii) , cc))
+            # mygraph[pos].append((str(i+1) + str(ii) , cc))
+            mygraph[pos].append(((i+1 , ii) , cc))
 
         if ii > 0 and not mynodes[i][ii-1] == 'x' : 
             cc = mynodes[i][ii-1]
             cc = cc.replace("r","").replace("b","").replace("p","")
-            mygraph[pos].append((str(i) + str(ii-1) , cc))
+            # mygraph[pos].append((str(i) + str(ii-1) , cc))
+            mygraph[pos].append(((i , ii-1) , cc))
 
         if ii < (m-1) and not mynodes[i][ii+1] == 'x' : 
             cc = mynodes[i][ii+1]
             cc = cc.replace("r","").replace("b","").replace("p","")
-            mygraph[pos].append((str(i) + str(ii+1) , cc))
+            # mygraph[pos].append((str(i) + str(ii+1) , cc))
+            mygraph[pos].append(((i , ii+1) , cc))
 
 
 # print(mygraph)
-# print(Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "42"))
 
-def get_json_result(results):
-    return json.dumps(results)
+path = Bidirectional_Search.BidirectionalSearch(mygraph , (1 , 0) , (4 ,2))
+print(path)
 
-@eel.expose
-def runIDS():    
-    q = ids.iterativeDeepening(mygraph , "10" , "42")
-    print(q)
-    return get_json_result({
-        "graph" : mygraph,
-        "path" : q,
-    });
+print("what a bummer!")
 
-eel.start('index.html' ,size=(500,500))
+path = Astar.a_star(mygraph , (1 , 0) , (4 ,2))
+print(path)
