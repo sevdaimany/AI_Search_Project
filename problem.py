@@ -24,7 +24,7 @@ def isDeadlock(butter,robot, search ,direction , graph):
             else:
                 return True
         else:
-            return False
+            return True
             
         
 def whichDirection(first , second):
