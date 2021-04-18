@@ -39,7 +39,7 @@ def whichDirection(first , second):
         return "u"
     elif ySecond == (yFirst +1):
         return "r"
-    elif yFirst == (ySecond - 1):
+    elif ySecond == (yFirst - 1):
         return "l"
    
 
