@@ -1,37 +1,51 @@
-class Problem:
-    def __init__(self , walls , goals):
-        self.walls = walls
-        self.goals = goals
+def isDeadlock(butter,robot, search ,direction , graph):
         
+        endX =0;
+        endY = 0;
+        rowButter = int(butter[0:1])
+        colButter = int(butter[-1:])
+            
+        if(direction == "r"):
+            endX = rowButter 
+            endY = colButter - 1
+        if(direction == "l"):
+            endX = rowButter 
+            endY = colButter + 1 
+        if(direction == "u"):
+            endX = rowButter +1
+            endY = colButter 
+        if(direction == "d"):
+            endX = rowButter  -1
+            endY = colButter
+         
+        if(checkAvailable(graph ,str(endX) + str(endY) )):
+            if search(graph,robot , str(endX) + str(endY), 20):
+                return False
+            else:
+                return True
+        else:
+            return False
+            
+        
+def whichDirection(first , second):
+    xFirst = int(first[0:1])
+    yFirst = int(first[-1:])
+    xSecond = int(second[0:1])
+    ySecond = int(second[-1:])
 
-    def isDeadlock(self ,butters):
-        for coordinate in butters:
-            row = int(coordinate[0:1])
-            col = int(coordinate[-1:])
-            if not self.isContain(goals , row ,col):
-            # check corners #
-                if  self.isContain(walls , row -1 ,col) and  self.isContain(walls , row ,col -1):
-                    return True
-                if  self.isContain(walls , row -1 ,col) and  self.isContain(walls , row ,col +1):
-                    return True
-                if  self.isContain(walls , row +1 ,col) and  self.isContain(walls , row ,col -1):
-                    return True
-                if  self.isContain(walls , row +1 ,col) and  self.isContain(walls , row ,col +1):
-                    return True
+    if xSecond == (xFirst +1):
+        return "d"
+    elif xSecond == (xFirst -1):
+        return "u"
+    elif ySecond == (yFirst +1):
+        return "r"
+    elif yFirst == (ySecond - 1):
+        return "l"
+   
 
-                ## sides ##
-                if self.isContain(walls , row-1 , col -1) and self.isContain(walls , row-1 , col ) and self.isContain(walls , row-1 , col +1) and self.isContain(walls , row , col -2) and self.isContain(walls , row , col +2) and (not self.isContain(goals , row , col -1)) and (not self.isContain(goals , row , col +1)):
-                    return True
-                if self.isContain(walls , row+1 , col -1) and self.isContain(walls , row+1 , col ) and self.isContain(walls , row+1 , col +1) and self.isContain(walls , row , col -2) and self.isContain(walls , row , col +2) and (not self.isContain(goals , row , col -1)) and (not self.isContain(goals , row , col +1)):
-                    return True
-                if self.isContain(walls , row-1 , col -1) and self.isContain(walls , row , col- 1 ) and self.isContain(walls , row+1 , col -1) and self.isContain(walls , row-2 , col) and self.isContain(walls , row+2 , col ) and (not self.isContain(goals , row-1 , col)) and (not self.isContain(goals , row+1 , col)):
-                    return True
-                if self.isContain(walls , row-1 , col +1) and self.isContain(walls , row , col +1 ) and self.isContain(walls , row+1 , col +1) and self.isContain(walls , row -2 , col) and self.isContain(walls , row +2  , col) and (not self.isContain(goals , row-1 , col)) and (not self.isContain(goals , row +1, col)):
-                    return True
-                    
-        return False
 
-    def isContain(self ,set , row , col):
-        if str(row)+str(col) in set :
-            return True
-        return False
+def checkAvailable(graph , next):
+    if next in graph :
+        if graph[next][0] == 'x' :
+            return False
+    return True
