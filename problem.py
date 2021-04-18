@@ -1,25 +1,12 @@
-def isDeadlock(butter,robot, search ,direction , graph):
+def isDeadlock(butter,robot, search ,direction , graph , butterCoordinate):
         
         endX =0;
         endY = 0;
-        rowButter = int(butter[0:1])
-        colButter = int(butter[-1:])
-            
-        if(direction == "r"):
-            endX = rowButter 
-            endY = colButter - 1
-        if(direction == "l"):
-            endX = rowButter 
-            endY = colButter + 1 
-        if(direction == "u"):
-            endX = rowButter +1
-            endY = colButter 
-        if(direction == "d"):
-            endX = rowButter  -1
-            endY = colButter
-         
-        if(checkAvailable(graph ,str(endX) + str(endY) )):
-            if search(graph,robot , str(endX) + str(endY), 20):
+       
+        robotsNewPlace = placeRobot(direction , butter)
+        
+        if(checkAvailable(graph ,robotsNewPlace,butterCoordinate )):
+            if search(graph,robot , robotsNewPlace, 20):
                 return False
             else:
                 return True
@@ -44,8 +31,27 @@ def whichDirection(first , second):
    
 
 
-def checkAvailable(graph , next):
+def checkAvailable(graph , next , butterCoordinate):
     if next in graph :
-        if graph[next][0] == 'x' :
+        if graph[next][0] == 'x'  or next == butterCoordinate :
             return False
     return True
+
+
+def placeRobot(direction , butter):
+    rowButter = int(butter[0:1])
+    colButter = int(butter[-1:])
+    if(direction == "r"):
+        endX = rowButter 
+        endY = colButter - 1
+    if(direction == "l"):
+        endX = rowButter 
+        endY = colButter + 1 
+    if(direction == "u"):
+        endX = rowButter +1
+        endY = colButter 
+    if(direction == "d"):
+        endX = rowButter  -1
+        endY = colButter
+
+    return str(endX) + str(endY) 
