@@ -4,16 +4,16 @@ const {world} = engine;
 let render;
 let runner;
 let robot;
+let butter;
 const unitLengthX = 110;
 const unitLengthY = 110;
-
 
 function table (graph) {
   const cellsHorizontal = 5;
   const cellsVertical = 5;
   const width = cellsHorizontal * 110;
   const height = cellsVertical * 110;
- 
+
   engine.world.gravity.y = 0;
   render = Render.create ({
     element: document.body,
@@ -23,7 +23,7 @@ function table (graph) {
       width,
       height,
       wireframes: false,
-      background: '#f8f5f1'
+      background: '#f8f5f1',
       // background : '#bbdfc8',
     },
   });
@@ -39,13 +39,12 @@ function table (graph) {
   ];
   World.add (world, walls);
 
-
-  for(const [key , value] of Object.entries(graph)){
-    let indexRow = parseInt(key.charAt(0))
-    let indexColumn = parseInt(key.charAt(1))
+  for (const [key, value] of Object.entries (graph)) {
+    let indexRow = parseInt (key.charAt (0));
+    let indexColumn = parseInt (key.charAt (1));
     let type = value[0];
     if (type === 'r') {
-         robot = Bodies.rectangle (
+      robot = Bodies.rectangle (
         (indexColumn + 0.5) * unitLengthX,
         (indexRow + 0.5) * unitLengthY,
         unitLengthX,
@@ -72,7 +71,7 @@ function table (graph) {
           isStatic: true,
           render: {
             sprite: {
-              texture: randomPic(),
+              texture: randomPic (),
             },
           },
         }
@@ -95,7 +94,7 @@ function table (graph) {
       );
       World.add (world, dest);
     } else if (type === 'b') {
-      const butter = Bodies.rectangle (
+      butter = Bodies.rectangle (
         (indexColumn + 0.5) * unitLengthX,
         (indexRow + 0.5) * unitLengthY,
         unitLengthX,
@@ -106,50 +105,68 @@ function table (graph) {
             sprite: {
               texture: './images/butter.png',
               xScale: 0.08,
-              yScale: 0.08
+              yScale: 0.08,
             },
           },
         }
       );
       World.add (world, butter);
     }
-
   }
 }
 
-
-
-function randomPic(){
-  let rand = Math.floor(Math.random() * 5)
-  if(rand === 0) return "./images/cake.png";
-  else if(rand === 1) return "./images/noodle.png";
-  else if(rand === 2) return "./images/noodles.png";
-  else if(rand === 3) return "./images/watermelon.png";
-  else if(rand === 4) return "./images/taco.png";
-
+function randomPic () {
+  let rand = Math.floor (Math.random () * 5);
+  if (rand === 0) return './images/cake.png';
+  else if (rand === 1) return './images/noodle.png';
+  else if (rand === 2) return './images/noodles.png';
+  else if (rand === 3) return './images/watermelon.png';
+  else if (rand === 4) return './images/taco.png';
 }
 
 
-function showResults(path){
+function showResults (pathButter, pathsRobot) {
   let index = 0;
-  let id = setInterval(function(){
-    if(index === path.length -1){
-      clearInterval(id)
+  let id = setInterval (function () {
+    setRobotNewPosition(pathsRobot , index);
+    if (index === pathButter.length - 1) {
+      clearInterval (id);
     }
-    let key = path[index];
-    let indexRow = parseInt(key.charAt(0));
-    let indexColumn = parseInt(key.charAt(1));
-    Body.setPosition(robot ,{x : (indexColumn + 0.5) * unitLengthX  ,y:(indexRow + 0.5) * unitLengthY} , {x: 0, y: 0.5});
-    index ++;
-  } , 1000);
+    let key = pathButter[index];
+    let indexRow = parseInt (key.charAt (0));
+    let indexColumn = parseInt (key.charAt (1));
+    Body.setPosition (
+      butter,
+      {x: (indexColumn + 0.5) * unitLengthX, y: (indexRow + 0.5) * unitLengthY},
+      {x: 0, y: 0.5}
+    );
+    index++;
+  }, 2500);
 }
 
 
-async function run(){
-  let resultsJSON = await eel.runIDS()();
-  let result = JSON.parse(resultsJSON)
-  table (result["graph"]);
-  showResults(result["path"]);
+function setRobotNewPosition(pathsRobot,indexRobot){
+  let index = 0;
+  let id = setInterval (function () {
+    if (index === pathsRobot[indexRobot].length - 1) {
+      clearInterval (id);
+    }
+    let key = pathsRobot[indexRobot][index];
+    let indexRow = parseInt (key.charAt (0));
+    let indexColumn = parseInt (key.charAt (1));
+    Body.setPosition (
+      robot,
+      {x: (indexColumn + 0.5) * unitLengthX, y: (indexRow + 0.5) * unitLengthY},
+      {x: 0, y: 0.5}
+    );
+    index++;
+  }, 500);
+}
+async function run () {
+  let resultsJSON = await eel.runIDS () ();
+  let result = JSON.parse (resultsJSON);
+  table (result['graph']);
+  showResults (result['pathButter'], result['pathsRobot']);
 }
 
-run()
+run ();
