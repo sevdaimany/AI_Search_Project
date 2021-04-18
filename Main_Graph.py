@@ -47,7 +47,9 @@ for i in range(m):
 #         print()
 #     else:
 #         x -= 1
-      
+
+walls = []
+goals = []   
 for i in range(n):
     for ii in range(m) :
         pos = str(i) + str(ii)
@@ -58,10 +60,12 @@ for i in range(n):
             kind = 'r'
         elif mynodes[i][ii].count('p') > 0 :
             kind = 'p'
+            goals.append(pos)
         elif mynodes[i][ii].count('b') > 0 :
             kind = 'b'
         elif mynodes[i][ii].count('x') > 0 :
             kind = 'x'
+            walls.append(pos)
         mygraph[pos].append(kind)
 
         if kind == 'x':
