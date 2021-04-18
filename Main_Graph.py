@@ -4,6 +4,7 @@ import io
 import Bidirectional_Search  , Astar
 import eel
 import json
+import ids
 
 eel.init("frontend")
 
@@ -14,19 +15,19 @@ mynodes = list()
 
 
 myinput = """5	5
-2	2	2	2	2
+2	2	2	x	2
 2r	1	1	1	2
-2	1	1b	1	2
+2	x	1b	1	x
 2	1	x	1	2
-2	2	2p	2	2"""
+2	2	2p	2	x"""
 
 
 
-address = "test1.txt"
-with open(address) as reader :
-    # print(reader.read())
-    myinput = reader.read()
-# print(myinput)
+# address = "test1.txt"
+# with open(address) as reader :
+#     # print(reader.read())
+#     myinput = reader.read()
+# # print(myinput)
 
 
 buf = io.StringIO(myinput)
@@ -98,7 +99,7 @@ for i in range(n):
             # mygraph[pos].append(((i , ii+1) , cc))
 
 
-# print(mygraph)
+print(mygraph)
 
 path = Bidirectional_Search.BidirectionalSearch(mygraph , (1 , 0) , (4 ,2))
 path = Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "42")
@@ -110,16 +111,16 @@ path = Astar.a_star(mygraph ,  "10" , "42")
 print(path)
 
 
-# def get_json_result(results):
-#     return json.dumps(results)
+def get_json_result(results):
+    return json.dumps(results)
 
-# @eel.expose
-# def runIDS():    
-#     q = ids.iterativeDeepening(mygraph , "10" , "42")
-#     print(q)
-#     return get_json_result({
-#         "graph" : mygraph,
-#         "path" : q,
-#     })
+@eel.expose
+def runIDS():    
+    q = ids.iterativeDeepening(mygraph , "10" , "42")
+    print(q)
+    return get_json_result({
+        "graph" : mygraph,
+        "path" : q,
+    })
 
-# eel.start('index.html' ,size=(500,500))
+eel.start('index.html' ,size=(500,500))
