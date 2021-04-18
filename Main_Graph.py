@@ -1,10 +1,10 @@
 
 import collections
-import io
-import Bidirectional_Search  , Astar
+import io ,Bidirectional_Search  , Astar
 import eel
 import json
 import ids
+import problem
 
 eel.init("frontend")
 
@@ -15,11 +15,11 @@ mynodes = list()
 
 
 myinput = """5	5
-2	2	2	x	2
-2r	1	1	1	2
-2	x	1b	1	x
+x	2	1	x	2
+2r	1	1b	1	x
+1	1	1	1	x
 2	1	x	1	2
-2	2	2p	2	x"""
+x	2	2p	2	1"""
 
 
 
@@ -48,8 +48,10 @@ for i in range(m):
 #     else:
 #         x -= 1
 
-walls = []
-goals = []   
+
+robot = ""
+goal = ""
+butter = ""
 for i in range(n):
     for ii in range(m) :
         pos = str(i) + str(ii)
@@ -58,14 +60,15 @@ for i in range(n):
         kind = 'o'
         if mynodes[i][ii].count('r') > 0 :
             kind = 'r'
+            robot = pos
         elif mynodes[i][ii].count('p') > 0 :
             kind = 'p'
-            goals.append(pos)
+            goal = pos
         elif mynodes[i][ii].count('b') > 0 :
             kind = 'b'
+            butter= pos
         elif mynodes[i][ii].count('x') > 0 :
             kind = 'x'
-            walls.append(pos)
         mygraph[pos].append(kind)
 
         if kind == 'x':
@@ -103,28 +106,51 @@ for i in range(n):
             # mygraph[pos].append(((i , ii+1) , cc))
 
 
-print(mygraph)
+# print(mygraph)
 
-path = Bidirectional_Search.BidirectionalSearch(mygraph , (1 , 0) , (4 ,2))
-path = Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "42")
-print(path)
+# path = Bidirectional_Search.BidirectionalSearch(mygraph , (1 , 0) , (4 ,2))
+# path = Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "42")
+# print(path)
 
-print("what a bummer!")
+# print("what a bummer!")
 
-path = Astar.a_star(mygraph ,  "10" , "42")
-print(path)
+# path = Astar.a_star(mygraph ,  "10" , "42")
+# print(path)
 
 
 def get_json_result(results):
     return json.dumps(results)
 
+
+def whereRobotGo(first ,second):
+    direction = problem.whichDirection(first,second)
+    return problem.placeRobot(direction , first)
+
+
 @eel.expose
-def runIDS():    
-    q = ids.iterativeDeepening(mygraph , "10" , "42")
+def runIDS(): 
+    #path butter
+    q = ids.iterativeDeepening(mygraph , butter , goal ,20,butterCoordinate=None ,robot=robot)
+    
+    robotPaths = []
+    robotCoordinate  = robot
+    for i in range(len(q)-1):
+        coordinate = whereRobotGo(q[i] , q[i+1])
+        robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20,q[i])
+        robotCoordinate = q[i]
+        robotPaths.append(robotPath)
+
+    robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , q[-2] ,20,q[i])
+    robotPaths.append(robotPath)
+
+    
+
+    print(robotPaths)
     print(q)
     return get_json_result({
         "graph" : mygraph,
-        "path" : q,
+        "pathButter" : q,
+        "pathsRobot" :robotPaths
     })
 
 eel.start('index.html' ,size=(500,500))
