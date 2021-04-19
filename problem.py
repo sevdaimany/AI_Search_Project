@@ -1,3 +1,4 @@
+## this function check if next state for butter is deadlock or not 
 def isDeadlock(butter,robot, search ,direction , graph , butterCoordinate):
         
         endX =0;
@@ -13,7 +14,8 @@ def isDeadlock(butter,robot, search ,direction , graph , butterCoordinate):
         else:
             return True
             
-        
+
+## this function return which direction butter is going to go ('r' , 'l' ,'u', 'd')      
 def whichDirection(first , second):
     xFirst = int(first[0:1])
     yFirst = int(first[-1:])
@@ -31,6 +33,7 @@ def whichDirection(first , second):
    
 
 
+## this function check if next state is empty or not
 def checkAvailable(graph , next , butterCoordinate):
     if next in graph :
         if graph[next][0] == 'x'  or next == butterCoordinate :
@@ -38,6 +41,7 @@ def checkAvailable(graph , next , butterCoordinate):
     return True
 
 
+## this function return a state that robot should go to push butter
 def placeRobot(direction , butter):
     rowButter = int(butter[0:1])
     colButter = int(butter[-1:])
