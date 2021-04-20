@@ -1,13 +1,14 @@
 import ids
+from state import State
 ## this function check if next state for butter is deadlock or not 
-def isDeadlock(butter,robot, search ,direction , graph , butterCoordinate):
+def isDeadlock(butter,robot, search ,direction , graph):
         
         endX =0;
         endY = 0;
        
         robotsNewPlace = placeRobot(direction , butter)
         
-        if(checkAvailable(graph ,robotsNewPlace,butterCoordinate )):
+        if(checkAvailable(graph ,robotsNewPlace,State.getButters() ,State.getRobot())):
             if(search == "ids"):
                 if(ids.iterativeDeepening(graph,robot , robotsNewPlace, 20)):
                     return False
@@ -36,9 +37,9 @@ def whichDirection(first , second):
 
 
 ## this function check if next state is empty or not
-def checkAvailable(graph , next , butterCoordinate):
+def checkAvailable(graph , next , butters ,robot):
     if next in graph :
-        if graph[next][0] == 'x'  or next == butterCoordinate :
+        if graph[next][0] == 'x'  or (next in butters) or (next == robot):
             return False
     return True
 
