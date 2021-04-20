@@ -15,11 +15,11 @@ mynodes = list()
 
 
 myinput = """5	5
-x	2	1	x	2
-2r	1	1b	1	x
-1	1	1	1	x
-2	1	x	1	2
-x	2	2p	2	1"""
+x	x	x	x	x
+2r	1	1	1	x
+1	1	1b	1	x
+2	2p	x	1	x
+x	2	2	2	x"""
 
 
 
@@ -131,19 +131,7 @@ def whereRobotGo(first ,second):
 def runIDS(): 
     #path butter
     q = ids.iterativeDeepening(mygraph , butter , goal ,20,butterCoordinate=None ,robot=robot)
-    
-    robotPaths = []
-    robotCoordinate  = robot
-    for i in range(len(q)-1):
-        coordinate = whereRobotGo(q[i] , q[i+1])
-        robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20,q[i])
-        robotCoordinate = q[i]
-        robotPaths.append(robotPath)
-
-    robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , q[-2] ,20,q[i])
-    robotPaths.append(robotPath)
-
-    
+    robotPaths = findRobotPaths(robot , q)
 
     print(robotPaths)
     print(q)
@@ -152,5 +140,18 @@ def runIDS():
         "pathButter" : q,
         "pathsRobot" :robotPaths
     })
+
+
+def findRobotPaths(firstRobotCoordinate ,pathButter):
+    robotPaths = []
+    robotCoordinate  = firstRobotCoordinate
+    for i in range(len(pathButter)-1):
+        coordinate = whereRobotGo(pathButter[i] , pathButter[i+1])
+        robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20,pathButter[i])
+        robotCoordinate = pathButter[i]
+        robotPaths.append(robotPath)
+    robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , pathButter[-2] ,20,pathButter[i])
+    robotPaths.append(robotPath)
+    return robotPaths
 
 eel.start('index.html' ,size=(500,500))
