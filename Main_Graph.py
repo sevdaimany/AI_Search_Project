@@ -131,7 +131,7 @@ def whereRobotGo(first ,second):
 def runIDS(): 
     #path butter
     q = ids.iterativeDeepening(mygraph , butter , goal ,20,butterCoordinate=None ,robot=robot)
-    robotPaths = findRobotPaths(robot , q)
+    robotPaths = findRobotPaths(robot , q , "ids")
 
     print(robotPaths)
     print(q)
@@ -142,15 +142,17 @@ def runIDS():
     })
 
 
-def findRobotPaths(firstRobotCoordinate ,pathButter):
+def findRobotPaths(firstRobotCoordinate ,pathButter, search):
     robotPaths = []
     robotCoordinate  = firstRobotCoordinate
     for i in range(len(pathButter)-1):
         coordinate = whereRobotGo(pathButter[i] , pathButter[i+1])
-        robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20,pathButter[i])
+        if(search == "ids"):
+            robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20,pathButter[i])
         robotCoordinate = pathButter[i]
         robotPaths.append(robotPath)
-    robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , pathButter[-2] ,20,pathButter[i])
+    if(search == "ids"):
+        robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , pathButter[-2] ,20,pathButter[i])
     robotPaths.append(robotPath)
     return robotPaths
 
