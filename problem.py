@@ -3,13 +3,13 @@ from state import State
 ## this function check if next state for butter is deadlock or not 
 def isDeadlock(butter,robot, search ,direction , graph):
         
-        endX =0;
-        endY = 0;
+        endX =0
+        endY = 0
        
         robotsNewPlace = placeRobot(direction , butter)
         
         if(checkAvailable(graph ,robotsNewPlace,State.getButters() ,State.getRobot())):
-            
+
             if(search == "ids"):
                 if(ids.iterativeDeepening(graph,robot , robotsNewPlace, 20)):
                     return False
