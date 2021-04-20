@@ -9,9 +9,12 @@ from state import State
 
 eel.init("frontend")
 
-
-mygraph = collections.defaultdict(list)
 mynodes = list()
+mygraph = collections.defaultdict(list)
+robot = ""
+goal = ""
+butters = []
+
 
 
 
@@ -29,7 +32,6 @@ x	2	2p	2	1"""
 #     # print(reader.read())
 #     myinput = reader.read()
 # # print(myinput)
-
 
 buf = io.StringIO(myinput)
 n , m = map(int ,buf.readlines(1)[0].replace("\t" , " ").replace("\n" , "").split(" "))
@@ -49,10 +51,6 @@ for i in range(m):
 #     else:
 #         x -= 1
 
-
-robot = ""
-goal = ""
-butters = []
 for i in range(n):
     for ii in range(m) :
         pos = str(i) + str(ii)
@@ -66,7 +64,7 @@ for i in range(n):
             goal = pos
         elif mynodes[i][ii].count('b') > 0 :
             kind = 'b'
-            butter= pos
+            butters.append(pos)
         elif mynodes[i][ii].count('x') > 0 :
             kind = 'x'
         mygraph[pos].append(kind)
@@ -117,6 +115,7 @@ for i in range(n):
 # print(path)
 
 
+
 def get_json_result(results):
     return json.dumps(results)
 
@@ -125,17 +124,20 @@ def whereRobotGo(first ,second):
     direction = problem.whichDirection(first,second)
     return problem.placeRobot(direction , first)
 
-def init(butters , robot):
+def init():
     State.setRobot = robot
     for i in range(len(butters)):
-        State.setButter(i , butter[i])
+        State.setButter(i , butters[i])
 
 
 @eel.expose
 def runIDS(): 
     #path butter
-    init(butters , robot)
-    q = ids.iterativeDeepening(mygraph , butter , goal ,20,robot=robot)
+    init()
+    print(butters)
+    print(goal)
+    q = ids.iterativeDeepening(mygraph , butters[0] , goal ,20,robot=robot)
+    print(q)
     robotPaths = findRobotPaths(robot , q , "ids" , 0)
 
     print(robotPaths)
