@@ -18,12 +18,13 @@ butters = []
 
 
 
-myinput = """5	5
-x	1	1	x	x
-2r	1	1b	1	x
-1	1	1	1	x
-2b	2	1	1	1p
-1p	2	2	2	1"""
+
+myinput = """5	6
+x	1	1	x	1	1
+2r	1	1b	1	x	x
+1	1	1	1	x	x
+2	2	x	1	1	1
+x	2	2p	2	1	1"""
 
 
 
@@ -35,10 +36,10 @@ x	1	1	x	x
 
 buf = io.StringIO(myinput)
 n , m = map(int ,buf.readlines(1)[0].replace("\t" , " ").replace("\n" , "").split(" "))
-for i in range(m):
+for i in range(n):
     buffread = buf.readlines(1)[0].replace("\t" , " ").replace("\n" , "").split(" ")
     mynd = []
-    for ii in range(n) : 
+    for ii in range(m) : 
         mynd.append(buffread[ii])
     mynodes.append(mynd)
 
