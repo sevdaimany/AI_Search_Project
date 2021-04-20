@@ -5,7 +5,7 @@ import eel
 import json
 import ids
 import problem
-# from state import State
+from state import State
 
 eel.init("frontend")
 
@@ -55,9 +55,8 @@ goal = ""
 butters = []
 for i in range(n):
     for ii in range(m) :
-
-        # pos = str(i) + str(ii)
-        pos = (i , ii)
+        pos = str(i) + str(ii)
+        # pos = (i , ii)
         kind = 'o'
         if mynodes[i][ii].count('r') > 0 :
             kind = 'r'
@@ -85,29 +84,29 @@ for i in range(n):
         if i > 0 and not mynodes[i-1][ii] == 'x' :
             cc = mynodes[i-1][ii]
             cc = cc.replace('r',"").replace('b',"").replace('p',"")
-            # mygraph[pos].append((str(i-1) + str(ii) , cc))
-            mygraph[pos].append(((i-1 , ii) , cc))
+            mygraph[pos].append((str(i-1) + str(ii) , cc))
+            # mygraph[pos].append(((i-1 , ii) , cc))
 
         if i < (n-1) and not mynodes[i+1][ii] == 'x' : 
             cc = mynodes[i+1][ii]
             cc = cc.replace("r","").replace("b","").replace("p","")
-            # mygraph[pos].append((str(i+1) + str(ii) , cc))
-            mygraph[pos].append(((i+1 , ii) , cc))
+            mygraph[pos].append((str(i+1) + str(ii) , cc))
+            # mygraph[pos].append(((i+1 , ii) , cc))
 
         if ii > 0 and not mynodes[i][ii-1] == 'x' : 
             cc = mynodes[i][ii-1]
             cc = cc.replace("r","").replace("b","").replace("p","")
-            # mygraph[pos].append((str(i) + str(ii-1) , cc))
-            mygraph[pos].append(((i , ii-1) , cc))
+            mygraph[pos].append((str(i) + str(ii-1) , cc))
+            # mygraph[pos].append(((i , ii-1) , cc))
 
         if ii < (m-1) and not mynodes[i][ii+1] == 'x' : 
             cc = mynodes[i][ii+1]
             cc = cc.replace("r","").replace("b","").replace("p","")
-            # mygraph[pos].append((str(i) + str(ii+1) , cc))
-            mygraph[pos].append(((i , ii+1) , cc))
+            mygraph[pos].append((str(i) + str(ii+1) , cc))
+            # mygraph[pos].append(((i , ii+1) , cc))
 
 
-print(mygraph)
+# print(mygraph)
 
 # path = Bidirectional_Search.BidirectionalSearch(mygraph , (1 , 0) , (2 ,2))
 # print(path)
@@ -126,22 +125,18 @@ def whereRobotGo(first ,second):
     direction = problem.whichDirection(first,second)
     return problem.placeRobot(direction , first)
 
+def init(butters , robot):
+    State.setRobot = robot
+    for i in range(len(butters)):
+        State.setButter(i , butter[i])
+
 
 @eel.expose
 def runIDS(): 
     #path butter
-    q = ids.iterativeDeepening(mygraph , butter , goal ,20,butterCoordinate=None ,robot=robot)
-    # robotPaths = []
-    # robotCoordinate  = robot
-    # for i in range(len(q)-1):
-    #     coordinate = whereRobotGo(q[i] , q[i+1])
-    #     robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20,q[i])
-    #     robotCoordinate = q[i]
-    #     robotPaths.append(robotPath)
-
-    # robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , q[-2] ,20,q[i])
-    # robotPaths.append(robotPath)
-    robotPaths = findRobotPaths(robot , q , "ids")
+    init(butters , robot)
+    q = ids.iterativeDeepening(mygraph , butter , goal ,20,robot=robot)
+    robotPaths = findRobotPaths(robot , q , "ids" , 0)
 
     print(robotPaths)
     print(q)
@@ -152,17 +147,26 @@ def runIDS():
     })
 
 
-def findRobotPaths(firstRobotCoordinate ,pathButter, search):
+def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
     robotPaths = []
     robotCoordinate  = firstRobotCoordinate
     for i in range(len(pathButter)-1):
         coordinate = whereRobotGo(pathButter[i] , pathButter[i+1])
+        State.setButter(whichButter , pathButter[i])
         if(search == "ids"):
-            robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20,pathButter[i])
+            robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20)
+        elif search == "bidirectional":
+            None
+        elif search == "astar":
+            None
         robotCoordinate = pathButter[i]
         robotPaths.append(robotPath)
     if(search == "ids"):
-        robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , pathButter[-2] ,20,pathButter[i])
+        robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , pathButter[-2] ,20)
+    elif search == "bidirectional":
+            None
+    elif search == "astar":
+            None
     robotPaths.append(robotPath)
     return robotPaths
 
