@@ -5,6 +5,7 @@ import eel
 import json
 import ids
 import problem
+# from state import State
 
 eel.init("frontend")
 
@@ -15,11 +16,11 @@ mynodes = list()
 
 
 myinput = """5	5
-x	x	x	x	x
-2r	1	1	1	x
-1	1	1b	1	x
-2	2p	x	1	x
-x	2	2	2	x"""
+x	1	1	x	1
+2r	1	1b	1	x
+1	1	1	1	x
+2	2	x	1	1
+x	2	2p	2	1"""
 
 
 
@@ -51,12 +52,11 @@ for i in range(m):
 
 robot = ""
 goal = ""
-butter = ""
+butters = []
 for i in range(n):
     for ii in range(m) :
         pos = str(i) + str(ii)
         # pos = (i , ii)
-        
         kind = 'o'
         if mynodes[i][ii].count('r') > 0 :
             kind = 'r'
@@ -106,7 +106,7 @@ for i in range(n):
             # mygraph[pos].append(((i , ii+1) , cc))
 
 
-# print(mygraph)
+print(mygraph)
 
 # path = Bidirectional_Search.BidirectionalSearch(mygraph , (1 , 0) , (4 ,2))
 # path = Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "42")
@@ -131,6 +131,16 @@ def whereRobotGo(first ,second):
 def runIDS(): 
     #path butter
     q = ids.iterativeDeepening(mygraph , butter , goal ,20,butterCoordinate=None ,robot=robot)
+    # robotPaths = []
+    # robotCoordinate  = robot
+    # for i in range(len(q)-1):
+    #     coordinate = whereRobotGo(q[i] , q[i+1])
+    #     robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20,q[i])
+    #     robotCoordinate = q[i]
+    #     robotPaths.append(robotPath)
+
+    # robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , q[-2] ,20,q[i])
+    # robotPaths.append(robotPath)
     robotPaths = findRobotPaths(robot , q , "ids")
 
     print(robotPaths)
