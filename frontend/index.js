@@ -163,7 +163,7 @@ function setRobotNewPosition(pathsRobot,indexRobot){
   }, 500);
 }
 async function run () {
-  let resultsJSON = await eel.runIDS () ();
+  let resultsJSON = await eel.main () ();
   let result = JSON.parse (resultsJSON);
   table (result['graph']);
   showResults (result['pathButter'], result['pathsRobot']);

@@ -115,7 +115,23 @@ for i in range(n):
 # print(path)
 
 
-
+@eel.expose
+def main():
+    init()
+    search = "ids"
+    if search == "ids":
+        q = ids.iterativeDeepening(mygraph , butters[0] , goal ,20,robot=robot)
+    elif search == "bidirectional":
+        None
+    elif search =="astar":
+        None
+    robotPaths = findRobotPaths(robot , q , "ids" , 0)
+    return get_json_result({
+        "graph" : mygraph,
+        "pathButter" : q,
+        "pathsRobot" :robotPaths})
+    
+    
 def get_json_result(results):
     return json.dumps(results)
 
@@ -128,25 +144,6 @@ def init():
     State.setRobot = robot
     for i in range(len(butters)):
         State.setButter(i , butters[i])
-
-
-@eel.expose
-def runIDS(): 
-    #path butter
-    init()
-    print(butters)
-    print(goal)
-    q = ids.iterativeDeepening(mygraph , butters[0] , goal ,20,robot=robot)
-    print(q)
-    robotPaths = findRobotPaths(robot , q , "ids" , 0)
-
-    print(robotPaths)
-    print(q)
-    return get_json_result({
-        "graph" : mygraph,
-        "pathButter" : q,
-        "pathsRobot" :robotPaths
-    })
 
 
 def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
