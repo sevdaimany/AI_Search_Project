@@ -1,6 +1,6 @@
 class State :
 
-    butters = []
+    butters = [0 for i in range(10)]
     robot = None
     depthIDS = 0
 
@@ -10,7 +10,7 @@ class State :
 
     @classmethod
     def setButter(cls , which , newPosition):
-        cls.butters.insert(which ,newPosition)
+        cls.butters[which] =newPosition 
 
     @classmethod
     def getRobot(cls):
