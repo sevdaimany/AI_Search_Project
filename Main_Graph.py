@@ -54,8 +54,8 @@ goal = ""
 butter = ""
 for i in range(n):
     for ii in range(m) :
-        pos = str(i) + str(ii)
-        # pos = (i , ii)
+        # pos = str(i) + str(ii)
+        pos = (i , ii)
         
         kind = 'o'
         if mynodes[i][ii].count('r') > 0 :
@@ -84,37 +84,36 @@ for i in range(n):
         if i > 0 and not mynodes[i-1][ii] == 'x' :
             cc = mynodes[i-1][ii]
             cc = cc.replace('r',"").replace('b',"").replace('p',"")
-            mygraph[pos].append((str(i-1) + str(ii) , cc))
-            # mygraph[pos].append(((i-1 , ii) , cc))
+            # mygraph[pos].append((str(i-1) + str(ii) , cc))
+            mygraph[pos].append(((i-1 , ii) , cc))
 
         if i < (n-1) and not mynodes[i+1][ii] == 'x' : 
             cc = mynodes[i+1][ii]
             cc = cc.replace("r","").replace("b","").replace("p","")
-            mygraph[pos].append((str(i+1) + str(ii) , cc))
-            # mygraph[pos].append(((i+1 , ii) , cc))
+            # mygraph[pos].append((str(i+1) + str(ii) , cc))
+            mygraph[pos].append(((i+1 , ii) , cc))
 
         if ii > 0 and not mynodes[i][ii-1] == 'x' : 
             cc = mynodes[i][ii-1]
             cc = cc.replace("r","").replace("b","").replace("p","")
-            mygraph[pos].append((str(i) + str(ii-1) , cc))
-            # mygraph[pos].append(((i , ii-1) , cc))
+            # mygraph[pos].append((str(i) + str(ii-1) , cc))
+            mygraph[pos].append(((i , ii-1) , cc))
 
         if ii < (m-1) and not mynodes[i][ii+1] == 'x' : 
             cc = mynodes[i][ii+1]
             cc = cc.replace("r","").replace("b","").replace("p","")
-            mygraph[pos].append((str(i) + str(ii+1) , cc))
-            # mygraph[pos].append(((i , ii+1) , cc))
+            # mygraph[pos].append((str(i) + str(ii+1) , cc))
+            mygraph[pos].append(((i , ii+1) , cc))
 
 
 # print(mygraph)
 
-# path = Bidirectional_Search.BidirectionalSearch(mygraph , (1 , 0) , (4 ,2))
-# path = Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "42")
+# path = Bidirectional_Search.BidirectionalSearch(mygraph , (1 , 0) , (2 ,2))
 # print(path)
 
 # print("what a bummer!")
 
-# path = Astar.a_star(mygraph ,  "10" , "42")
+# path = Astar.a_star(mygraph ,  (1,0) , (2,2))
 # print(path)
 
 
