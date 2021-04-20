@@ -9,11 +9,18 @@ def isDeadlock(butter,robot, search ,direction , graph):
         robotsNewPlace = placeRobot(direction , butter)
         
         if(checkAvailable(graph ,robotsNewPlace,State.getButters() ,State.getRobot())):
+            
             if(search == "ids"):
                 if(ids.iterativeDeepening(graph,robot , robotsNewPlace, 20)):
                     return False
                 else:
                     return True
+
+            elif search == "bidirectional":
+                None
+
+            elif search =="astar":
+                None
         else:
             return True
             
