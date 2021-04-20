@@ -119,6 +119,7 @@ for i in range(n):
 def main():
     init()
     butterPaths =[]
+    robotPaths = []
     for i in range(len(butters)):
         search = "ids"
         if search == "ids":
@@ -128,7 +129,7 @@ def main():
         elif search =="astar":
             None
         butterPaths.append(q)
-        robotPaths = findRobotPaths(robot , q , "ids" , i)
+        robotPaths.append(findRobotPaths(robot , q , "ids" , i))
     return get_json_result({
         "graph" : mygraph,
         "pathButters" : butterPaths,
