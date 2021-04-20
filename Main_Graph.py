@@ -12,7 +12,7 @@ eel.init("frontend")
 mynodes = list()
 mygraph = collections.defaultdict(list)
 robot = ""
-goal = ""
+goal = []
 butters = []
 
 
@@ -61,7 +61,7 @@ for i in range(n):
             robot = pos
         elif mynodes[i][ii].count('p') > 0 :
             kind = 'p'
-            goal = pos
+            goal.append(pos)
         elif mynodes[i][ii].count('b') > 0 :
             kind = 'b'
             butters.append(pos)
@@ -123,13 +123,15 @@ def main():
     for i in range(len(butters)):
         search = "ids"
         if search == "ids":
-            q = ids.iterativeDeepening(mygraph , butters[i] , goal ,20,robot=robot)
+            q = ids.iterativeDeepening(mygraph , butters[i] , goal[i] ,20,robot=robot)
         elif search == "bidirectional":
             None
         elif search =="astar":
             None
         butterPaths.append(q)
         robotPaths.append(findRobotPaths(robot , q , "ids" , i))
+        print(butterPaths)
+        print(robotPaths)
     return get_json_result({
         "graph" : mygraph,
         "pathButters" : butterPaths,
