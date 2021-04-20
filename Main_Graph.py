@@ -19,11 +19,11 @@ butters = []
 
 
 myinput = """5	5
-x	1	1	x	1
+x	1	1	x	x
 2r	1	1b	1	x
 1	1	1	1	x
-2	2	x	1	1
-x	2	2p	2	1"""
+2b	2	1	1	1p
+1p	2	2	2	1"""
 
 
 
@@ -129,7 +129,7 @@ def main():
         elif search =="astar":
             None
         butterPaths.append(q)
-        robotPaths.append(findRobotPaths(robot , q , "ids" , i))
+        robotPaths.append(findRobotPaths(State.getRobot() , q , "ids" , i))
         print(butterPaths)
         print(robotPaths)
     return get_json_result({
@@ -148,7 +148,7 @@ def whereRobotGo(first ,second):
     return problem.placeRobot(direction , first)
 
 def init():
-    State.setRobot = robot
+    State.setRobot(robot)
     for i in range(len(butters)):
         State.setButter(i , butters[i])
 
@@ -174,6 +174,7 @@ def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
     elif search == "astar":
             None
     robotPaths.append(robotPath)
+    State.setRobot(robotPath[-1])
     return robotPaths
 
 eel.start('index.html' ,size=(500,500))
