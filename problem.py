@@ -1,3 +1,4 @@
+import ids
 ## this function check if next state for butter is deadlock or not 
 def isDeadlock(butter,robot, search ,direction , graph , butterCoordinate):
         
@@ -7,10 +8,11 @@ def isDeadlock(butter,robot, search ,direction , graph , butterCoordinate):
         robotsNewPlace = placeRobot(direction , butter)
         
         if(checkAvailable(graph ,robotsNewPlace,butterCoordinate )):
-            if search(graph,robot , robotsNewPlace, 20):
-                return False
-            else:
-                return True
+            if(search == "ids"):
+                if(ids.iterativeDeepening(graph,robot , robotsNewPlace, 20)):
+                    return False
+                else:
+                    return True
         else:
             return True
             
