@@ -4,7 +4,8 @@ const {world} = engine;
 let render;
 let runner;
 let robot;
-let butter;
+// let butter;
+let butters = [];
 const unitLengthX = 110;
 const unitLengthY = 110;
 
@@ -94,7 +95,7 @@ function table (graph) {
       );
       World.add (world, dest);
     } else if (type === 'b') {
-      butter = Bodies.rectangle (
+      let butter = Bodies.rectangle (
         (indexColumn + 0.5) * unitLengthX,
         (indexRow + 0.5) * unitLengthY,
         unitLengthX,
@@ -110,6 +111,7 @@ function table (graph) {
           },
         }
       );
+      butters.push(butter);
       World.add (world, butter);
     }
   }
@@ -125,48 +127,93 @@ function randomPic () {
 }
 
 
-function showResults (pathButter, pathsRobot) {
-  let index = 0;
-  let id = setInterval (function () {
-    setRobotNewPosition(pathsRobot , index);
-    if (index === pathButter.length - 1) {
-      clearInterval (id);
-    }
-    let key = pathButter[index];
-    let indexRow = parseInt (key.charAt (0));
-    let indexColumn = parseInt (key.charAt (1));
-    Body.setPosition (
-      butter,
-      {x: (indexColumn + 0.5) * unitLengthX, y: (indexRow + 0.5) * unitLengthY},
-      {x: 0, y: 0.5}
-    );
-    index++;
-  }, 2500);
-}
+// function showResults (pathButter, pathsRobot) {
+//   let index = 0;
+//   let id = setInterval (function () {
+//     setRobotNewPosition(pathsRobot , index);
+//     if (index === pathButter.length - 1) {
+//       clearInterval (id);
+//     }
+//     let key = pathButter[index];
+//     let indexRow = parseInt (key.charAt (0));
+//     let indexColumn = parseInt (key.charAt (1));
+//     Body.setPosition (
+//       butter,
+//       {x: (indexColumn + 0.5) * unitLengthX, y: (indexRow + 0.5) * unitLengthY},
+//       {x: 0, y: 0.5}
+//     );
+//     index++;
+//   }, 2500);
+// }
 
+//////////////////////////////////////////////////////////////////////
+function showResults (pathButters , pathsRobot){
+  let numButter =0 ;
+  let levelRobot = 0;
+    // for(let numButter = 0 ; numButter < pathButters.length ; numButter++){
+      // for(let levelRobot = 0 ; levelRobot < pathsRobot[numButter].length ; levelRobot ++){
+      let index = 0;
+      let id = setInterval (function () {
+        if((numButter === pathButters.length  )&&(levelRobot === pathsRobot[numButter].length) && (index === pathsRobot[numButter][levelRobot].length )){
+          clearInterval(id);
+        }
+        if(levelRobot === pathsRobot[numButter].length ){
+          numButter ++;
+          levelRobot  = 0;
+        }
+        if (index === pathsRobot[numButter][levelRobot].length ) {
+          levelRobot ++;
+          index = 0;
+          // clearInterval (id);
+        }
+        if(index === 0){
+          let key = pathButters[numButter][levelRobot];
+          let indexRow = parseInt (key.charAt (0));
+          let indexColumn = parseInt (key.charAt (1));
+          Body.setPosition (
+            butters[numButter],
+            {x: (indexColumn + 0.5) * unitLengthX, y: (indexRow + 0.5) * unitLengthY},
+            {x: 0, y: 0.5}
+          );
+        }
+        let key = pathsRobot[numButter][levelRobot][index];
+        console.log(key);
+        let indexRow = parseInt (key.charAt (0));
+        let indexColumn = parseInt (key.charAt (1));
+        Body.setPosition (
+          robot,
+          {x: (indexColumn + 0.5) * unitLengthX, y: (indexRow + 0.5) * unitLengthY},
+          {x: 0, y: 0.5}
+        );
+        index++;
+      }, 300);
 
-function setRobotNewPosition(pathsRobot,indexRobot){
-  let index = 0;
-  let id = setInterval (function () {
-    if (index === pathsRobot[indexRobot].length - 1) {
-      clearInterval (id);
     }
-    let key = pathsRobot[indexRobot][index];
-    let indexRow = parseInt (key.charAt (0));
-    let indexColumn = parseInt (key.charAt (1));
-    Body.setPosition (
-      robot,
-      {x: (indexColumn + 0.5) * unitLengthX, y: (indexRow + 0.5) * unitLengthY},
-      {x: 0, y: 0.5}
-    );
-    index++;
-  }, 500);
-}
+  // }
+// }
+
+// function setRobotNewPosition(pathsRobot,indexRobot){
+//   let index = 0;
+//   let id = setInterval (function () {
+//     if (index === pathsRobot[indexRobot].length - 1) {
+//       clearInterval (id);
+//     }
+//     let key = pathsRobot[indexRobot][index];
+//     let indexRow = parseInt (key.charAt (0));
+//     let indexColumn = parseInt (key.charAt (1));
+//     Body.setPosition (
+//       robot,
+//       {x: (indexColumn + 0.5) * unitLengthX, y: (indexRow + 0.5) * unitLengthY},
+//       {x: 0, y: 0.5}
+//     );
+//     index++;
+//   }, 500);
+// }
 async function run () {
   let resultsJSON = await eel.main () ();
   let result = JSON.parse (resultsJSON);
   table (result['graph']);
-  showResults (result['pathButter'], result['pathsRobot']);
+  showResults (result['pathButters'], result['pathsRobot']);
 }
 
 run ();
