@@ -1,13 +1,13 @@
 
 import collections
 import io ,Bidirectional_Search  , Astar
-import eel
+# import eel
 import json
 import ids
 import problem
 from state import State
 
-eel.init("frontend")
+# eel.init("frontend")
 
 mynodes = list()
 mygraph = collections.defaultdict(list)
@@ -19,11 +19,11 @@ butters = []
 
 
 myinput = """5	6
-x	1	1	x	1	1
-2r	1	1b	1	x	x
+1	1	2r	1	1	1
+1	1	1b	1	x	x
 1	1	1	1	x	x
 2	2	x	1	1	1
-x	2	2p	2	1	1"""
+1	2	2p	2	1	1"""
 
 
 
@@ -106,13 +106,12 @@ for i in range(n):
 
 # print(mygraph)
 
-path = Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "22")
-print(path)
+# path = Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "22")
+# print(path)
 
-print("what a bummer!")
+# print("what a bummer!")
 
-path = Astar.a_star(mygraph ,  "10" , "22")
-print(path)
+
 
 
 # @eel.expose
@@ -121,15 +120,16 @@ print(path)
 #     butterPaths =[]
 #     robotPaths = []
 #     for i in range(len(butters)):
-#         search = "ids"
+#         search = "astar"
 #         if search == "ids":
 #             q = ids.iterativeDeepening(mygraph , butters[i] , goal[i] ,20,robot=robot)
 #         elif search == "bidirectional":
 #             None
 #         elif search =="astar":
-#             None
+#             q = Astar.a_star(mygraph ,  "12" , "42" , robot )
+#             print(q)
 #         butterPaths.append(q)
-#         robotPaths.append(findRobotPaths(robot , q , "ids" , i))
+#         robotPaths.append(findRobotPaths(robot , q , "astar" , i))
 #         print(butterPaths)
 #         print(robotPaths)
 #     return get_json_result({
@@ -147,10 +147,10 @@ print(path)
 #     direction = problem.whichDirection(first,second)
 #     return problem.placeRobot(direction , first)
 
-# def init():
-#     State.setRobot = robot
-#     for i in range(len(butters)):
-#         State.setButter(i , butters[i])
+def init():
+    State.setRobot(robot)
+    for i in range(len(butters)):
+        State.setButter(i , butters[i])
 
 
 # def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
@@ -164,7 +164,7 @@ print(path)
 #         elif search == "bidirectional":
 #             None
 #         elif search == "astar":
-#             None
+#             robotPath =  Astar.a_star(mygraph , robotCoordinate , coordinate )
 #         robotCoordinate = pathButter[i]
 #         robotPaths.append(robotPath)
 #     if(search == "ids"):
@@ -172,8 +172,13 @@ print(path)
 #     elif search == "bidirectional":
 #             None
 #     elif search == "astar":
-#             None
+#             robotPath = Astar.a_star(mygraph , robotCoordinate , pathButter[-2] )
 #     robotPaths.append(robotPath)
 #     return robotPaths
 
 # eel.start('index.html' ,size=(500,500))
+
+
+init()
+q = Astar.a_star(mygraph ,  "12" , "42"  )
+print(q)

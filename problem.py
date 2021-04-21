@@ -1,14 +1,17 @@
-import ids
+import ids  , Astar 
+import Bidirectional_Search
 from state import State
+
+
 ## this function check if next state for butter is deadlock or not 
 def isDeadlock(butter,robot, search ,direction , graph):
         
-        endX =0;
-        endY = 0;
+        endX =0
+        endY = 0
        
         robotsNewPlace = placeRobot(direction , butter)
         
-        if(checkAvailable(graph ,robotsNewPlace,State.getButters() ,State.getRobot())):
+        if(checktwobefor(graph ,robotsNewPlace,State.getButters())):
             
             if(search == "ids"):
                 if(ids.iterativeDeepening(graph,robot , robotsNewPlace, 20)):
@@ -20,15 +23,60 @@ def isDeadlock(butter,robot, search ,direction , graph):
                 None
 
             elif search =="astar":
-                None
+                # if(Astar.a_star( graph , State.getButters() , robotsNewPlace)):
+                #     return False
+                # else:
+                #     return True
+                return True
         else:
             return True
-            
+
+
+def deadlock(graph , currentpos, nextpos , parentpos ):
+
+    cx = int(currentpos[1])
+    cy = int(currentpos[0])
+    ny = int(nextpos[0])
+    nx = int(nextpos[1])
+    rx = -1
+    ry = -1
+
+    if cy == ny : 
+        ry = cy
+        if nx - cx > 0 :
+            rx = cx - 1
+        else :
+            rx = cx + 1
+    elif cx == nx : 
+        rx = cx
+        if ny - cy > 0 :
+            ry = cy - 1
+        else :
+            ry = cy + 1
+
+    robotpos = str(ry) + str(rx)
+
+    checkresult = checktwobefor(graph , robotpos , State.getButters() )
+
+    if parentpos is not None : 
+        checkpath = Astar.a_star(graph , parentpos.position , robotpos   , True)
+    else :
+        checkpath = True
+    
+
+    return checkresult and ( checkpath is not False)
+
+
+    
+
+
 
 ## this function return which direction butter is going to go ('r' , 'l' ,'u', 'd')      
 def whichDirection(first , second):
+
     xFirst = int(first[0:1])
     yFirst = int(first[-1:])
+
     xSecond = int(second[0:1])
     ySecond = int(second[-1:])
 
@@ -50,11 +98,18 @@ def checkAvailable(graph , next , butters ,robot):
             return False
     return True
 
+def checktwobefor(graph , next , butters):
+    if next in graph :
+        if graph[next][0] == 'x'  or (next in butters) :
+            return False
+    return True
 
 ## this function return a state that robot should go to push butter
 def placeRobot(direction , butter):
+
     rowButter = int(butter[0:1])
     colButter = int(butter[-1:])
+
     if(direction == "r"):
         endX = rowButter 
         endY = colButter - 1
