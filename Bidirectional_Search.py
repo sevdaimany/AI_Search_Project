@@ -1,8 +1,9 @@
-
 import collections
+import problem
+from state import State
 
 # BidirectionalSearch implementation
-def BidirectionalSearch(graph , srcm , destm):
+def BidirectionalSearch(graph , srcm , destm , isrobot =False):
 	
 	size  = len(graph)
 
@@ -28,28 +29,48 @@ def BidirectionalSearch(graph , srcm , destm):
 			while len(connected_node) > i:
 				
 				vertex = connected_node[i][0]
+				i += 1
+
+				if not problem.checkAvailable(graph , vertex , State.getButters() , State.getRobot()) :
+					continue
+				
+				parentpos = None
+				if current in src_parent.keys():
+					parentpos = src_parent[current]
+					
+				if isrobot is False :
+					if not problem.deadlock(graph , current , vertex , parentpos , "bidirectional") :
+						continue
 
 				if not src_visited[vertex]:
 					src_queue.append(vertex)
 					src_visited[vertex] = True
 					src_parent[vertex] = current
 					
-				i += 1
+				
 		else:
 			
+			# BFS in backward direction
 			current = dest_queue.pop(0)
 			connected_node = graph[current]
 			i = 2
 
 			while len(connected_node) > i:
 				vertex = connected_node[i][0]
+				i += 1
+
+				if not problem.checkAvailable(graph , vertex , State.getButters() , State.getRobot()) :
+					continue
 				
+				if not problem.deadlockbd(graph , current , vertex ) :
+					continue
+
 				if not dest_visited[vertex]:
 					dest_queue.append(vertex)
 					dest_visited[vertex] = True
 					dest_parent[vertex] = current
 					
-				i += 1
+				
 				
 	# Check for intersecting vertex
 	def is_intersecting():

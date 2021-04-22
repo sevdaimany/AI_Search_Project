@@ -116,7 +116,7 @@ def a_star(mygraph, start, end , isrobot = False):
                 #     bummer  = True
 
             if isrobot is False :
-                if not problem.deadlock(mygraph , current_node.position , child.position , current_node.parent ) : 
+                if not problem.deadlock(mygraph , current_node.position , child.position , current_node.parent , "astar") : 
                     bummer  = True
 
             if bummer == True :

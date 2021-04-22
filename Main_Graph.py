@@ -182,3 +182,6 @@ def init():
 init()
 q = Astar.a_star(mygraph ,  "12" , "42"  )
 print(q)
+
+path = Bidirectional_Search.BidirectionalSearch(mygraph , "12" , "42")
+print(path)

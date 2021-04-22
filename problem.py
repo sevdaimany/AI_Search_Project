@@ -32,7 +32,7 @@ def isDeadlock(butter,robot, search ,direction , graph):
             return True
 
 
-def deadlock(graph , currentpos, nextpos , parentpos ):
+def deadlock(graph , currentpos, nextpos , parentpos , search):
 
     cx = int(currentpos[1])
     cy = int(currentpos[0])
@@ -58,8 +58,19 @@ def deadlock(graph , currentpos, nextpos , parentpos ):
 
     checkresult = checktwobefor(graph , robotpos , State.getButters() )
 
-    if parentpos is not None : 
-        checkpath = Astar.a_star(graph , parentpos.position , robotpos   , True)
+    if parentpos is not None :
+        
+        if(search == "ids"):
+            pass
+
+        elif search == "bidirectional":
+            checkpath = Bidirectional_Search.BidirectionalSearch(graph , parentpos , robotpos   , True)
+
+        elif search =="astar":
+
+            checkpath = Astar.a_star(graph , parentpos.position , robotpos   , True)
+
+        
     else :
         checkpath = True
     
@@ -68,8 +79,33 @@ def deadlock(graph , currentpos, nextpos , parentpos ):
 
 
     
+def deadlockbd(graph , currentpos, nextpos ):
 
+    cx = int(currentpos[1])
+    cy = int(currentpos[0])
+    ny = int(nextpos[0])
+    nx = int(nextpos[1])
+    rx = -1
+    ry = -1
 
+    if cy == ny : 
+        ry = cy
+        if nx - cx > 0 :
+            rx = nx + 1
+        else :
+            rx = nx - 1
+    elif cx == nx : 
+        rx = cx
+        if ny - cy > 0 :
+            ry = ny + 1
+        else :
+            ry = ny - 1
+
+    robotpos = str(ry) + str(rx)
+
+    checkresult = checktwobefor(graph , robotpos , State.getButters() )
+
+    return checkresult 
 
 ## this function return which direction butter is going to go ('r' , 'l' ,'u', 'd')      
 def whichDirection(first , second):
