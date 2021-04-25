@@ -1,9 +1,10 @@
-
+import problem
+from state import State
 
 
 class Node():
 
-    def __init__(self, parent=None, position=None , cost=0):
+    def __init__(self, parent=None, position=None , cost=0 ):
         self.parent = parent
         self.position = position
 
@@ -16,7 +17,7 @@ class Node():
         return self.position == other.position
 
 
-def a_star(mygraph, start, end):
+def a_star(mygraph, start, end , isrobot = False):
     
     # Create start and end node
     start_node = Node(None, start , mygraph[start][1])
@@ -29,11 +30,15 @@ def a_star(mygraph, start, end):
     frontier = []
     explored = []
 
+    current_node = None
+
     # Add the start node
     frontier.append(start_node)
 
     # Loop until you find the end
     while len(frontier) > 0:
+
+    
 
         # Get the current node
         current_node = frontier[0]
@@ -72,10 +77,11 @@ def a_star(mygraph, start, end):
             # Append
             children.append(new_node)
 
+
         # Loop through children
-        
         for child in children:
             bummer = False
+            
         
             # Create the f, g, and h values
             child.g = current_node.g + child.c
@@ -86,10 +92,31 @@ def a_star(mygraph, start, end):
             for closed_child in explored:
                 if child == closed_child :
                     bummer  = True
+
+            if bummer == True :
+                continue
                     
             # Child is already in the open list
             for open_node in frontier:
                 if child == open_node and child.g > open_node.g:
+                    bummer  = True
+            
+            if bummer == True :
+                continue
+
+            if not problem.checkAvailable(mygraph , child.position , State.getButters() , State.getRobot()) :
+                bummer  = True
+            
+            if bummer == True :
+                continue
+            
+            # if robot != None :
+                # direction =  problem.whichDirection(current_node.position , child.position)
+                # if problem.isDeadlock(current_node.position , None , "astar" ,direction , mygraph) :
+                #     bummer  = True
+
+            if isrobot is False :
+                if not problem.deadlock(mygraph , current_node.position , child.position , current_node.parent , "astar") : 
                     bummer  = True
 
             if bummer == True :
@@ -97,5 +124,7 @@ def a_star(mygraph, start, end):
 
             # Add the child to the open list
             frontier.append(child)
+    
+    return False
 
 
