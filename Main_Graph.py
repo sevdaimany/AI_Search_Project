@@ -17,7 +17,7 @@ butters = []
 
 
 myinput = """5	6
-1	1	1	1	1	1
+1	1	1	1	x	1
 2	1	1b	1r	1b	2
 2p	x	1	1	1	2
 2	1	1	1	1	2
@@ -164,26 +164,33 @@ def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
     for i in range(len(pathButter)-1):
         coordinate = whereRobotGo(pathButter[i] , pathButter[i+1])
         State.setButter(whichButter , pathButter[i])
+        tmp = mygraph[pathButter[i]][0]
+        mygraph[pathButter[i]][0] = 'x'
         if(search == "ids"):
-            tmp = mygraph[pathButter[i]][0]
-            mygraph[pathButter[i]][0] = 'x'
+            # tmp = mygraph[pathButter[i]][0]
+            # mygraph[pathButter[i]][0] = 'x'
             robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20)
-            mygraph[pathButter[i]][0] = tmp
+            # mygraph[pathButter[i]][0] = tmp
         elif search == "bidirectional":
             None
         elif search == "astar":
             robotPath =  Astar.a_star(mygraph , robotCoordinate , coordinate )
+        mygraph[pathButter[i]][0] = tmp
         robotCoordinate = pathButter[i]
         robotPaths.append(robotPath)
+
+    tmp = mygraph[pathButter[-1]][0]
+    mygraph[pathButter[-1]][0] = 'x'    
     if(search == "ids"):
-        tmp = mygraph[pathButter[-1]][0]
-        mygraph[pathButter[-1]][0] = 'x'
+        # tmp = mygraph[pathButter[-1]][0]
+        # mygraph[pathButter[-1]][0] = 'x'
         robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , pathButter[-2] ,20)
-        mygraph[pathButter[-1]][0] = tmp
+        # mygraph[pathButter[-1]][0] = tmp
     elif search == "bidirectional":
             None
     elif search == "astar":
             robotPath = Astar.a_star(mygraph , robotCoordinate , pathButter[-2] )
+    mygraph[pathButter[-1]][0] = tmp
     robotPaths.append(robotPath)
     return robotPaths
 
