@@ -1,5 +1,5 @@
 import problem
-from state import State
+# from state import State
 def iterativeDeepening(graph , start , goal,length, robot = None ):
     depth = 0
     result = None
@@ -26,10 +26,11 @@ def depthLimited(graph , start , goal, depth, stack ,visited = None , robot = No
     visited.add(start)
     for next in graph.get(start):
         if type(next) == tuple: 
-            if (not next[0] in visited )and (problem.checkAvailable(graph , next[0], State.getButters() , State.getRobot())):
+            if (not next[0] in visited )and (problem.checkAvailable(graph , next[0], start , robot)):
                 if robot != None :
                     direction =  problem.whichDirection(start , next[0])
                     if not problem.isDeadlock(start , robot ,"ids",direction , graph) :
+                    # if not problem.deadlock(graph ,start ,next ,reachGoal[-1] ,"ids"):
                         reachGoal =depthLimited(graph , next[0] ,goal, depth-1,stack, visited, robot)
                         if reachGoal:
                              return reachGoal
