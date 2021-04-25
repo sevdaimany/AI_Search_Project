@@ -29,8 +29,11 @@ def depthLimited(graph , start , goal, depth, stack ,visited = None , robot = No
             if (not next[0] in visited )and (problem.checkAvailable(graph , next[0], start , robot)):
                 if robot != None :
                     direction =  problem.whichDirection(start , next[0])
-                    if not problem.isDeadlock(start , robot ,"ids",direction , graph) :
-                    # if not problem.deadlock(graph ,start ,next ,reachGoal[-1] ,"ids"):
+                    tmp = graph[start][0]
+                    graph[start][0] = 'x'
+                    checkDeadlock = problem.isDeadlock(start , robot ,"ids",direction , graph)
+                    graph[start][0] = tmp
+                    if not checkDeadlock:
                         reachGoal =depthLimited(graph , next[0] ,goal, depth-1,stack, visited, robot)
                         if reachGoal:
                              return reachGoal
