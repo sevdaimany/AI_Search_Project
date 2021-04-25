@@ -6,6 +6,7 @@ import json
 import ids
 import problem
 from state import State
+import copy
 
 eel.init("frontend")
 
@@ -116,6 +117,7 @@ for i in range(n):
 @eel.expose
 def main():
     init()
+    GRAPH = copy.deepcopy(mygraph)
     butterPaths =[]
     robotPaths = []
     for i in range(len(butters)):
@@ -137,7 +139,7 @@ def main():
         print(butterPaths)
         print(robotPaths)
     return get_json_result({
-        "graph" : mygraph,
+        "graph" : GRAPH,
         "pathButters" : butterPaths,
         "pathsRobot" :robotPaths})
     
@@ -190,7 +192,7 @@ def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
             None
     elif search == "astar":
             robotPath = Astar.a_star(mygraph , robotCoordinate , pathButter[-2] )
-    mygraph[pathButter[-1]][0] = tmp
+    # mygraph[pathButter[-1]][0] = tmp
     robotPaths.append(robotPath)
     return robotPaths
 
