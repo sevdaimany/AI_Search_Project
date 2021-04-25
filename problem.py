@@ -1,17 +1,14 @@
 import ids  , Astar 
 import Bidirectional_Search
-from state import State
+# from state import State
 
 
 ## this function check if next state for butter is deadlock or not 
 def isDeadlock(butter,robot, search ,direction , graph):
         
-        endX =0
-        endY = 0
-       
         robotsNewPlace = placeRobot(direction , butter)
 
-        if(checktwobefor(graph ,robotsNewPlace,State.getButters())):
+        if(checktwobefor(graph ,robotsNewPlace,butter)):
 
             if(search == "ids"):
                 if(ids.iterativeDeepening(graph,robot , robotsNewPlace, 20)):
@@ -32,50 +29,54 @@ def isDeadlock(butter,robot, search ,direction , graph):
             return True
 
 
-def deadlock(graph , currentpos, nextpos , parentpos , search):
+# def deadlock(graph , currentpos, nextpos , parentpos , search):
 
-    cx = int(currentpos[1])
-    cy = int(currentpos[0])
-    ny = int(nextpos[0])
-    nx = int(nextpos[1])
-    rx = -1
-    ry = -1
+#     # cx = int(currentpos[1])
+#     # cy = int(currentpos[0])
+#     # ny = int(nextpos[0])
+#     # nx = int(nextpos[1])
+#     # rx = -1
+#     # ry = -1
 
-    if cy == ny : 
-        ry = cy
-        if nx - cx > 0 :
-            rx = cx - 1
-        else :
-            rx = cx + 1
-    elif cx == nx : 
-        rx = cx
-        if ny - cy > 0 :
-            ry = cy - 1
-        else :
-            ry = cy + 1
+#     # if cy == ny : 
+#     #     ry = cy
+#     #     if nx - cx > 0 :
+#     #         rx = cx - 1
+#     #     else :
+#     #         rx = cx + 1
+#     # elif cx == nx : 
+#     #     rx = cx
+#     #     if ny - cy > 0 :
+#     #         ry = cy - 1
+#     #     else :
+#     #         ry = cy + 1
 
-    robotpos = str(ry) + str(rx)
+#     # robotpos = str(ry) + str(rx)
 
-    checkresult = checktwobefor(graph , robotpos , State.getButters() )
+#     direction = whichDirection(currentpos , nextpos)
+#     robotpos = placeRobot(direction , currentpos)
 
-    if parentpos is not None :
+#     checkresult = checktwobefor(graph , robotpos , State.getButters() )
+
+#     if parentpos is not None :
         
-        if(search == "ids"):
-            pass
+#         if(search == "ids"):
+#             checkpath = ids.iterativeDeepening(graph,parentpos , robotpos, 20);
+#             # None
 
-        elif search == "bidirectional":
-            checkpath = Bidirectional_Search.BidirectionalSearch(graph , parentpos , robotpos   , True)
+#         elif search == "bidirectional":
+#             checkpath = Bidirectional_Search.BidirectionalSearch(graph , parentpos , robotpos   , True)
 
-        elif search =="astar":
+#         elif search =="astar":
 
-            checkpath = Astar.a_star(graph , parentpos.position , robotpos   , True)
+#             checkpath = Astar.a_star(graph , parentpos.position , robotpos   , True)
 
         
-    else :
-        checkpath = True
+#     else :
+#         checkpath = True
     
 
-    return checkresult and ( checkpath is not False)
+#     return checkresult and ( checkpath is not False)
 
 
     
@@ -130,7 +131,7 @@ def whichDirection(first , second):
 ## this function check if next state is empty or not
 def checkAvailable(graph , next , butters ,robot):
     if next in graph :
-        if graph[next][0] == 'x'  or (next in butters) or (next == robot):
+        if graph[next][0] == 'x'  or (next in butters):
             return False
     return True
 
