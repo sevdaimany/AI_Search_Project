@@ -1,5 +1,5 @@
 import problem
-from state import State
+
 
 
 class Node():
@@ -17,8 +17,17 @@ class Node():
         return self.position == other.position
 
 
-def a_star(mygraph, start, end , isrobot = False):
-    
+def a_star(mygraph, start, end , isrobot = False , robotpos = None , butters = [] , current_butter = None):
+
+    sx = int(start[1])
+    sy = int(start[0])
+    ey = int(end[0])
+    ex = int(end[1])
+
+    if sx < 0 or sy < 0 or ex < 0 or ey < 0 :
+        return False
+
+
     # Create start and end node
     start_node = Node(None, start , mygraph[start][1])
     start_node.g = start_node.h = start_node.f = 0
@@ -48,9 +57,7 @@ def a_star(mygraph, start, end , isrobot = False):
                 current_node = item
                 current_index = index
 
-        # Pop current off open list, add to closed list
-        frontier.pop(current_index)
-        explored.append(current_node)
+        
 
         # Found the goal
         if current_node == end_node:
@@ -60,6 +67,18 @@ def a_star(mygraph, start, end , isrobot = False):
                 path.append(current.position)
                 current = current.parent
             return path[::-1] # Return reversed path
+
+
+        if isrobot is True : 
+                if current_node.position == current_butter :
+                    frontier.pop(current_index)
+                    continue 
+                    # print("fuck")
+
+
+        # Pop current off open list, add to closed list
+        frontier.pop(current_index)
+        explored.append(current_node)
 
         # Generate children
         children = []
@@ -104,20 +123,29 @@ def a_star(mygraph, start, end , isrobot = False):
             if bummer == True :
                 continue
 
-            if not problem.checkAvailable(mygraph , child.position , State.getButters() , State.getRobot()) :
+            robotp = None
+            if current_node.parent is None :
+                robotp = robotpos
+            else:
+                robotp = current_node.parent.position
+
+            if not problem.checktwobefor(mygraph , child.position , butters) :
                 bummer  = True
             
             if bummer == True :
                 continue
+                
             
-            # if robot != None :
-                # direction =  problem.whichDirection(current_node.position , child.position)
-                # if problem.isDeadlock(current_node.position , None , "astar" ,direction , mygraph) :
-                #     bummer  = True
+
+            # if isrobot is False :
+            #     if not problem.deadlock(mygraph , current_node.position , child.position , robotp , "astar") : 
+            #         bummer  = True
 
             if isrobot is False :
-                if not problem.deadlock(mygraph , current_node.position , child.position , current_node.parent , "astar") : 
+                direction = problem.whichDirection(current_node.position , child.position  )
+                if problem.isDeadlock(current_node.position ,robotp , "astar" , direction , mygraph , butters ) : 
                     bummer  = True
+
 
             if bummer == True :
                 continue

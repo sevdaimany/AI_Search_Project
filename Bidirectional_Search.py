@@ -1,9 +1,9 @@
 import collections
 import problem
-from state import State
+
 
 # BidirectionalSearch implementation
-def BidirectionalSearch(graph , srcm , destm , isrobot =False):
+def BidirectionalSearch(graph , srcm , destm , isrobot = False , robotpos = None , butters = [] , current_butter = None ):
 	
 	size  = len(graph)
 
@@ -26,20 +26,31 @@ def BidirectionalSearch(graph , srcm , destm , isrobot =False):
 			connected_node = graph[current]
 			i = 2
 
+			if isrobot is True : 
+				if current == current_butter :
+					return 
+					# print("fuck")
+
 			while len(connected_node) > i:
 				
 				vertex = connected_node[i][0]
 				i += 1
 
-				if not problem.checkAvailable(graph , vertex , State.getButters() , State.getRobot()) :
+				if not problem.checktwobefor(graph , vertex , butters) :
 					continue
 				
 				parentpos = None
 				if current in src_parent.keys():
 					parentpos = src_parent[current]
-					
+				else:
+					parentpos = robotpos
+
+				if 	parentpos == -1 :
+					parentpos = robotpos
+				
 				if isrobot is False :
-					if not problem.deadlock(graph , current , vertex , parentpos , "bidirectional") :
+					direction = problem.whichDirection(current , vertex  )
+					if problem.isDeadlock(current , parentpos , "bidirectional" , direction , graph , butters ) : 
 						continue
 
 				if not src_visited[vertex]:
@@ -55,14 +66,27 @@ def BidirectionalSearch(graph , srcm , destm , isrobot =False):
 			connected_node = graph[current]
 			i = 2
 
+			if isrobot is True : 
+				if current == current_butter :
+					return 
+					# print("fuck")
+
+
 			while len(connected_node) > i:
 				vertex = connected_node[i][0]
 				i += 1
 
-				if not problem.checkAvailable(graph , vertex , State.getButters() , State.getRobot()) :
+				if not problem.checktwobefor(graph , vertex , butters) :
 					continue
 				
-				if not problem.deadlockbd(graph , current , vertex ) :
+				parentpos = None
+				if current in dest_parent.keys():
+					parentpos = dest_parent[current]
+
+				if 	parentpos == -1 :
+					parentpos = None
+
+				if problem.deadlockbd(graph , current , vertex, parentpos , butters  ) :
 					continue
 
 				if not dest_visited[vertex]:
