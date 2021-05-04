@@ -9,7 +9,7 @@ def iterativeDeepening(graph , start , goal,length, robot = None ):
         if result != None:
             break
         depth +=1
-    return result
+    return result , depth
     
 def depthLimited(graph , start , goal, depth, stack ,visited = None , robot = None):
     stack.append(start)
