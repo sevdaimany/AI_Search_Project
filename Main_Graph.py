@@ -8,8 +8,8 @@ import problem
 
 import copy
 
-eel.init("frontend")
-# eel.init("C:\\Users\\rajab\\OneDrive\\Desktop\\Artificial Intelligence\\project\\git\\project1\\AI_Search_Project\\frontend")
+# eel.init("frontend")
+eel.init("C:\\Users\\rajab\\OneDrive\\Desktop\\Artificial Intelligence\\project\\git\\project1\\AI_Search_Project\\frontend")
 
 mynodes = list()
 mygraph = collections.defaultdict(list)
@@ -21,19 +21,19 @@ depth = 0
 
 
 
-# myinput = """5	6
-# 1	1	1	1	x	1
-# 2	1	1b	1r	1b	2
-# 2p	x	1	1	1	2
-# 2	1	1	1	1	2
-# 1	x	x	x	1	1p"""
+myinput = """5	6
+1	1	1	1	x	1
+2	1	1b	1r	1b	2
+2p	x	1	1	1	2
+2	1	1	1	1	2
+1	x	x	x	1	1p"""
 
-myinput = """5	5
-1	1	1r	1	x
-2	1	1b	x	x
-1	1	1	1	x
-2	2	x	1	1
-1	1	2p	1	1"""
+# myinput = """5	5
+# 1	1	1r	1	x
+# 2	1	1b	x	x
+# 1	1	1	1	x
+# 2	2	x	1	1
+# 1	1	2p	1	1"""
 
 
 # myinput = """5	5
@@ -58,14 +58,7 @@ for i in range(n):
         mynd.append(buffread[ii])
     mynodes.append(mynd)
 
-# x = n
-# for i in mynodes :
-#     print(i , end=" ")
-#     if x == 1 :
-#         x = n
-#         print()
-#     else:
-#         x -= 1
+
 
 for i in range(n):
     for ii in range(m) :
@@ -122,15 +115,6 @@ for i in range(n):
 
 
 
-
-# print(path)
-
-# print("what a bummer!")
-
-
-
-
-
 @eel.expose
 def main():
     success = True 
@@ -144,7 +128,7 @@ def main():
             robotPos = butterPaths[i-1][-2]
         else:
             robotPos = robot
-        search = "ids"
+        search = "bidirectional"
         if search == "ids":
             (q, d) = ids.iterativeDeepening(mygraph , butters[i] , goal[i] ,20,robot=robotPos)
             depth[i] = d
@@ -154,10 +138,23 @@ def main():
             
             print(q)
         elif search == "bidirectional":
-            None
-        elif search =="astar":
-            q = Astar.a_star(mygraph ,  butters[i]  , goal[i]  , robotPos )
+            
+            (q , c , d) = Bidirectional_Search.BidirectionalSearch(mygraph , butters[i] , goal[i]  , False ,  robotPos   , None , None )
+            depth[i] = d
+            costs[i] = c
+            if q == None :
+                success = False
+            print("hhh")
             print(q)
+
+        elif search =="astar":
+            
+            (q , c , d) = Astar.a_star(mygraph , butters[i]  , goal[i]  , False ,  robotPos   , None ,None )
+            depth[i] = d
+            costs[i] = c
+            if q == None :
+                success = False
+
         butterPaths.append(q)
         if(success):
             robotPaths.append(findRobotPaths(robotPos , q , search , i))
@@ -194,14 +191,14 @@ def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
         tmp = mygraph[pathButter[i]][0]
         mygraph[pathButter[i]][0] = 'x'
         if(search == "ids"):
-            # tmp = mygraph[pathButter[i]][0]
-            # mygraph[pathButter[i]][0] = 'x'
             (robotPath,e) = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20)
-            # mygraph[pathButter[i]][0] = tmp
+
         elif search == "bidirectional":
-            None
+            (robotPath , c , d) = Astar.a_star(mygraph , robotCoordinate , coordinate  , True ,  None   , None , None )
+
         elif search == "astar":
-            robotPath =  Astar.a_star(mygraph , robotCoordinate , coordinate )
+            (robotPath , c , d) = Astar.a_star(mygraph , robotCoordinate , coordinate  , True ,  None   , None , None )
+
         mygraph[pathButter[i]][0] = tmp
         robotCoordinate = pathButter[i]
         robotPaths.append(robotPath)
@@ -214,9 +211,10 @@ def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
         (robotPath, e) = ids.iterativeDeepening(mygraph , robotCoordinate , pathButter[-2] ,20)
         # mygraph[pathButter[-1]][0] = tmp
     elif search == "bidirectional":
-            None
+        (robotPath , c , d) = Astar.a_star(mygraph , robotCoordinate , pathButter[-2]  , True ,  None   , None , None )
     elif search == "astar":
-            robotPath = Astar.a_star(mygraph , robotCoordinate , pathButter[-2] )
+        (robotPath , c , d) = Astar.a_star(mygraph , robotCoordinate , pathButter[-2]  , True ,  None   , None , None )
+
     # mygraph[pathButter[-1]][0] = tmp
     robotPaths.append(robotPath)
     return robotPaths
@@ -224,17 +222,7 @@ def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
 eel.start('index.html' ,size=(500,500))
 
 
-# butter_goal =  butters[0]
-# butters.pop(0)
-# q = Astar.a_star(mygraph ,  butter_goal  , goal[0]  , False ,  robot   , butters ,None  )
-# print(q)
 
 
-
-
-# butter_goal =  butters[0]
-# butters.pop(0)
-# path = Bidirectional_Search.BidirectionalSearch(mygraph , butter_goal  , goal[0]  , False ,  robot   , butters ,None )
-# print(path)
 
 

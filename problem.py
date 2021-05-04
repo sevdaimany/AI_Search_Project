@@ -28,14 +28,15 @@ def isDeadlock(butter,robot, search ,direction , graph  , butters = [] ):
         if(checktwobefor(graph ,robotsNewPlace, butters)):
 
             if(search == "ids"):
-                (q, d) =ids.iterativeDeepening(graph,robot , robotsNewPlace, 20);
+                (q, d) =ids.iterativeDeepening(graph,robot , robotsNewPlace, 20)
                 if(q):
                     return False
                 else:
                     return True
 
             elif search =="astar" or search == "bidirectional":
-                if(Astar.a_star( graph , robot , robotsNewPlace , True , None , butters , butter )):
+                (q  , c , d) = Astar.a_star( graph , robot , robotsNewPlace , True , None , None , butter )
+                if(q):
                     return False
                 else:
                     return True
@@ -123,8 +124,8 @@ def deadlockbd(graph , currentpos, nextpos ,parentpos, butters = []  ):
         return True
 
     
-        
-    if(Astar.a_star(graph , robotpos , robotnewpos  , True ,None , butters ,nextpos ) ) :
+    (q, c , d) = Astar.a_star(graph , robotpos , robotnewpos  , True ,None , butters , nextpos )
+    if(q) :
         return False
     else:
         return True
@@ -160,9 +161,9 @@ def checkAvailable(graph , next , butters , robot):
             return False
     return True
 
-def checktwobefor(graph , next , butters):
+def checktwobefor(graph , next , butters =None):
     if next in graph :
-        if graph[next][0] == 'x'  or (next in butters) :
+        if graph[next][0] == 'x'   :
             return False
     return True
 

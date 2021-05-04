@@ -66,7 +66,12 @@ def a_star(mygraph, start, end , isrobot = False , robotpos = None , butters = [
             while current is not None:
                 path.append(current.position)
                 current = current.parent
-            return path[::-1] # Return reversed path
+            path.reverse()
+            cost = 0
+            for i in range(len(path)-1):
+                cost +=  int(mygraph[path[i+1]][1])
+
+            return (path , cost , len(path) -1 ) # Return reversed path
 
 
         if isrobot is True : 
@@ -153,6 +158,6 @@ def a_star(mygraph, start, end , isrobot = False , robotpos = None , butters = [
             # Add the child to the open list
             frontier.append(child)
     
-    return False
+    return (None , 0 , 0 )
 
 

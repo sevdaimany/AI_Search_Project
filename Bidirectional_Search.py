@@ -48,10 +48,14 @@ def BidirectionalSearch(graph , srcm , destm , isrobot = False , robotpos = None
 				if 	parentpos == -1 :
 					parentpos = robotpos
 				
+				tmp = graph[current][0]
+				graph[current][0] = 'x'
 				if isrobot is False :
 					direction = problem.whichDirection(current , vertex  )
-					if problem.isDeadlock(current , parentpos , "bidirectional" , direction , graph , butters ) : 
+					if problem.isDeadlock(current , parentpos , "astar" , direction , graph , None ) :
+						graph[current][0] = tmp 
 						continue
+				graph[current][0] = tmp
 
 				if not src_visited[vertex]:
 					src_queue.append(vertex)
@@ -88,10 +92,13 @@ def BidirectionalSearch(graph , srcm , destm , isrobot = False , robotpos = None
 				if 	parentpos == -1 :
 					parentpos = None
 
+				tmp = graph[current][0]
+				graph[current][0] = 'x'
 				if parentpos is not None :
 					if problem.deadlockbd(graph , current , vertex, parentpos , butters  ) :
+						graph[current][0] = tmp
 						continue
-				
+				graph[current][0] = tmp
 
 				if not dest_visited[vertex]:
 					dest_queue.append(vertex)
@@ -181,5 +188,11 @@ def BidirectionalSearch(graph , srcm , destm , isrobot = False , robotpos = None
 				
 		return path
 		
-	msgg = bidirectional_search(srcm , destm)
-	return msgg
+	path = bidirectional_search(srcm , destm)
+	if len(path) == 0 :
+		return ()
+	cost = 0
+	for i in range(len(path)-1):
+		cost +=  int(graph[path[i+1]][1])
+	
+	return (path , cost , len(path)-1)
