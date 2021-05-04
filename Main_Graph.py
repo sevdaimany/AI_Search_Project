@@ -9,6 +9,7 @@ import problem
 import copy
 
 eel.init("frontend")
+# eel.init("C:\\Users\\rajab\\OneDrive\\Desktop\\Artificial Intelligence\\project\\git\\project1\\AI_Search_Project\\frontend")
 
 mynodes = list()
 mygraph = collections.defaultdict(list)
@@ -119,10 +120,8 @@ for i in range(n):
             # mygraph[pos].append(((i , ii+1) , cc))
 
 
-# print(mygraph)
 
 
-# path = Bidirectional_Search.BidirectionalSearch(mygraph , "10" , "22")
 
 # print(path)
 
@@ -175,7 +174,6 @@ def main():
         "height" : n,
         },
         )
-    
 
     
 def get_json_result(results):
@@ -231,14 +229,12 @@ eel.start('index.html' ,size=(500,500))
 # q = Astar.a_star(mygraph ,  butter_goal  , goal[0]  , False ,  robot   , butters ,None  )
 # print(q)
 
-# butters.append(goal[0])
-# butter_goal =  butters[0]
-# butters.pop(0)
 
-# q = Astar.a_star(mygraph ,  butter_goal  , goal[1]  , False ,  robot   , butters )
-# print(q)
+
 
 # butter_goal =  butters[0]
 # butters.pop(0)
 # path = Bidirectional_Search.BidirectionalSearch(mygraph , butter_goal  , goal[0]  , False ,  robot   , butters ,None )
 # print(path)
+
+

@@ -66,18 +66,20 @@ def BidirectionalSearch(graph , srcm , destm , isrobot = False , robotpos = None
 			connected_node = graph[current]
 			i = 2
 
-			if isrobot is True : 
-				if current == current_butter :
-					return 
-					# print("fuck")
+			# if isrobot is True : 
+			# 	if current == current_butter :
+			# 		return 
+			# 		# print("fuck")
 
-
+			
 			while len(connected_node) > i:
+				
 				vertex = connected_node[i][0]
 				i += 1
 
 				if not problem.checktwobefor(graph , vertex , butters) :
 					continue
+
 				
 				parentpos = None
 				if current in dest_parent.keys():
@@ -86,8 +88,10 @@ def BidirectionalSearch(graph , srcm , destm , isrobot = False , robotpos = None
 				if 	parentpos == -1 :
 					parentpos = None
 
-				if problem.deadlockbd(graph , current , vertex, parentpos , butters  ) :
-					continue
+				if parentpos is not None :
+					if problem.deadlockbd(graph , current , vertex, parentpos , butters  ) :
+						continue
+				
 
 				if not dest_visited[vertex]:
 					dest_queue.append(vertex)
@@ -105,7 +109,7 @@ def BidirectionalSearch(graph , srcm , destm , isrobot = False , robotpos = None
 			if (src_visited[i] and
 				dest_visited[i]):
 				return i
-			
+
 		return -1
 
 	# Print the path from source to target
