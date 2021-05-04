@@ -125,16 +125,23 @@ function randomPic () {
   else if (rand === 4) return './images/taco.png';
 }
 
-function alertMessage (depths) {
-  let message = 'depths :';
+function alertMessage (depths,costs) {
+  let message = 'depths : ';
   for (let i = 0; i < depths.length; i++) {
     message += depths[i];
     message += "  ";
   }
+  message +="\ncosts  : ";
+
+  for (let i = 0; i < costs.length; i++) {
+    message += costs[i];
+    message += "  ";
+  }
+  
   return message;
 }
 
-function showResults (pathButters, pathsRobot, depths) {
+function showResults (pathButters, pathsRobot, depths ,costs) {
   let numButter = 0;
   let levelRobot = 0;
   let check = true;
@@ -148,7 +155,7 @@ function showResults (pathButters, pathsRobot, depths) {
     ) {
       check = false;
       clearInterval (id);
-      alert (alertMessage(depths));
+      alert (alertMessage(depths , costs));
     }
     if (levelRobot === pathsRobot[numButter].length) {
       numButter++;
@@ -193,7 +200,7 @@ async function run () {
   if (result['success'] === false) {
     alert ("Can't pass the butter");
   } else {
-    showResults (result['pathButters'], result['pathsRobot'], result['depth']);
+    showResults (result['pathButters'], result['pathsRobot'], result['depth'], result['cost']);
   }
 }
 
