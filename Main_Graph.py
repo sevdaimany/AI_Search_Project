@@ -1,20 +1,22 @@
 
 import collections
 import io ,Bidirectional_Search  , Astar
-# import eel
+import eel
 import json
 import ids
 import problem
 
 import copy
 
-# eel.init("frontend")
+eel.init("frontend")
 
 mynodes = list()
 mygraph = collections.defaultdict(list)
 robot =""
 goal = []
 butters = []
+success = True 
+
 
 
 # myinput = """5	6
@@ -24,12 +26,12 @@ butters = []
 # 2	1	1	1	1	2
 # 1	x	x	x	1	1p"""
 
-myinput = """5	5
-1	1	1r	1	x
-2	1	1b	x	x
-1	1	1	1	x
-2	2	x	1	1
-1	1	2p	1	1"""
+# myinput = """5	5
+# 1	1	1r	1	x
+# 2	1	1b	x	x
+# 1	1	1	1	x
+# 2	2	x	1	1
+# 1	1	2p	1	1"""
 
 
 # myinput = """5	5
@@ -39,11 +41,11 @@ myinput = """5	5
 # 2	1	2	1	1
 # 1	1	1	1	1"""
 
-# address = "test5.txt"
-# with open(address) as reader :
-#     # print(reader.read())
-#     myinput = reader.read()
-# # print(myinput)
+address = "test4.txt"
+with open(address) as reader :
+    # print(reader.read())
+    myinput = reader.read()
+# print(myinput)
 
 buf = io.StringIO(myinput)
 n , m = map(int ,buf.readlines(1)[0].replace("\t" , " ").replace("\n" , "").split(" "))
@@ -129,44 +131,54 @@ for i in range(n):
 
 
 
-# @eel.expose
-# def main():
-#     init()
-#     GRAPH = copy.deepcopy(mygraph)
-#     butterPaths =[]
-#     robotPaths = []
-#     for i in range(len(butters)):
-#         if i > 0:
-#             robotPos = butterPaths[i-1][-2]
-#         else:
-#             robotPos = robot
-#         search = "ids"
-#         if search == "ids":
-#             q = ids.iterativeDeepening(mygraph , butters[i] , goal[i] ,20,robot=robotPos)
-#             print(q)
-#         elif search == "bidirectional":
-#             None
-#         elif search =="astar":
-#             q = Astar.a_star(mygraph ,  butters[i]  , goal[i]  , robotPos )
-#             print(q)
-#         butterPaths.append(q)
-#         robotPaths.append(findRobotPaths(robotPos , q , search , i))
-#         print(butterPaths)
-#         print(robotPaths)
-#     return get_json_result({
-#         "graph" : GRAPH,
-#         "pathButters" : butterPaths,
-#         "pathsRobot" :robotPaths})
+@eel.expose
+def main():
+    # init()
+    GRAPH = copy.deepcopy(mygraph)
+    butterPaths =[]
+    robotPaths = []
+    for i in range(len(butters)):
+        if i > 0:
+            robotPos = butterPaths[i-1][-2]
+        else:
+            robotPos = robot
+        search = "ids"
+        if search == "ids":
+            q = ids.iterativeDeepening(mygraph , butters[i] , goal[i] ,20,robot=robotPos)
+            if q == None :
+                success = False
+            
+            print(q)
+        elif search == "bidirectional":
+            None
+        elif search =="astar":
+            q = Astar.a_star(mygraph ,  butters[i]  , goal[i]  , robotPos )
+            print(q)
+        butterPaths.append(q)
+        if(success):
+            robotPaths.append(findRobotPaths(robotPos , q , search , i))
+        print(butterPaths)
+        print(robotPaths)
+        cost = 0
+        depth = 2
+    return get_json_result({
+        "graph" : GRAPH,
+        "pathButters" : butterPaths,
+        "pathsRobot" :robotPaths,
+        "cost" :cost,
+        "depth" : depth,
+        "success" : success},
+        )
     
 
     
-# def get_json_result(results):
-#     return json.dumps(results)
+def get_json_result(results):
+    return json.dumps(results)
 
 
-# def whereRobotGo(first ,second):
-#     direction = problem.whichDirection(first,second)
-#     return problem.placeRobot(direction , first)
+def whereRobotGo(first ,second):
+    direction = problem.whichDirection(first,second)
+    return problem.placeRobot(direction , first)
 
 # def init():
 #     State.setRobot(robot)
@@ -175,43 +187,43 @@ for i in range(n):
 
 
 
-# def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
-#     robotPaths = []
-#     robotCoordinate  = firstRobotCoordinate
-#     for i in range(len(pathButter)-1):
-#         coordinate = whereRobotGo(pathButter[i] , pathButter[i+1])
-#         State.setButter(whichButter , pathButter[i])
-#         tmp = mygraph[pathButter[i]][0]
-#         mygraph[pathButter[i]][0] = 'x'
-#         if(search == "ids"):
-#             # tmp = mygraph[pathButter[i]][0]
-#             # mygraph[pathButter[i]][0] = 'x'
-#             robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20)
-#             # mygraph[pathButter[i]][0] = tmp
-#         elif search == "bidirectional":
-#             None
-#         elif search == "astar":
-#             robotPath =  Astar.a_star(mygraph , robotCoordinate , coordinate )
-#         mygraph[pathButter[i]][0] = tmp
-#         robotCoordinate = pathButter[i]
-#         robotPaths.append(robotPath)
+def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
+    robotPaths = []
+    robotCoordinate  = firstRobotCoordinate
+    for i in range(len(pathButter)-1):
+        coordinate = whereRobotGo(pathButter[i] , pathButter[i+1])
+        # State.setButter(whichButter , pathButter[i])
+        tmp = mygraph[pathButter[i]][0]
+        mygraph[pathButter[i]][0] = 'x'
+        if(search == "ids"):
+            # tmp = mygraph[pathButter[i]][0]
+            # mygraph[pathButter[i]][0] = 'x'
+            robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20)
+            # mygraph[pathButter[i]][0] = tmp
+        elif search == "bidirectional":
+            None
+        elif search == "astar":
+            robotPath =  Astar.a_star(mygraph , robotCoordinate , coordinate )
+        mygraph[pathButter[i]][0] = tmp
+        robotCoordinate = pathButter[i]
+        robotPaths.append(robotPath)
 
-#     tmp = mygraph[pathButter[-1]][0]
-#     mygraph[pathButter[-1]][0] = 'x'    
-#     if(search == "ids"):
-#         # tmp = mygraph[pathButter[-1]][0]
-#         # mygraph[pathButter[-1]][0] = 'x'
-#         robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , pathButter[-2] ,20)
-#         # mygraph[pathButter[-1]][0] = tmp
-#     elif search == "bidirectional":
-#             None
-#     elif search == "astar":
-#             robotPath = Astar.a_star(mygraph , robotCoordinate , pathButter[-2] )
-#     # mygraph[pathButter[-1]][0] = tmp
-#     robotPaths.append(robotPath)
-#     return robotPaths
+    tmp = mygraph[pathButter[-1]][0]
+    mygraph[pathButter[-1]][0] = 'x'    
+    if(search == "ids"):
+        # tmp = mygraph[pathButter[-1]][0]
+        # mygraph[pathButter[-1]][0] = 'x'
+        robotPath = ids.iterativeDeepening(mygraph , robotCoordinate , pathButter[-2] ,20)
+        # mygraph[pathButter[-1]][0] = tmp
+    elif search == "bidirectional":
+            None
+    elif search == "astar":
+            robotPath = Astar.a_star(mygraph , robotCoordinate , pathButter[-2] )
+    # mygraph[pathButter[-1]][0] = tmp
+    robotPaths.append(robotPath)
+    return robotPaths
 
-# eel.start('index.html' ,size=(500,500))
+eel.start('index.html' ,size=(500,500))
 
 
 # butter_goal =  butters[0]
