@@ -146,10 +146,14 @@ def a_star(mygraph, start, end , isrobot = False , robotpos = None , butters = [
             #     if not problem.deadlock(mygraph , current_node.position , child.position , robotp , "astar") : 
             #         bummer  = True
 
+
             if isrobot is False :
+                # tmp = mygraph[current_node.position][0]
+                # mygraph[current_node.position][0] = 'x'
                 direction = problem.whichDirection(current_node.position , child.position  )
                 if problem.isDeadlock(current_node.position ,robotp , "astar" , direction , mygraph , butters ) : 
                     bummer  = True
+                # mygraph[current_node.position][0] = tmp
 
 
             if bummer == True :

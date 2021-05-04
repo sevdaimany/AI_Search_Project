@@ -111,8 +111,7 @@ def deadlockbd(graph , currentpos, nextpos ,parentpos, butters = []  ):
     robotpos = str(ry) + str(rx)
     robotnewpos = str(rny) + str(rnx)
 
-    # if len(robotpos) >= 3 or (len(robotnewpos) >= 3 ):
-    #         return True
+    
 
     checkresult = checktwobefor(graph , robotpos , butters)
     if checkresult is False :
@@ -123,6 +122,10 @@ def deadlockbd(graph , currentpos, nextpos ,parentpos, butters = []  ):
     if checkresult is False :
         return True
 
+
+    
+    if(checkfourside(graph ,robotpos , nextpos )):
+        return True
     
     (q, c , d) = Astar.a_star(graph , robotpos , robotnewpos  , True ,None , butters , nextpos )
     if(q) :
@@ -187,3 +190,50 @@ def placeRobot(direction , butter):
         endY = colButter
 
     return str(endX) + str(endY) 
+
+
+def checkfourside(graph , pos , nextpos) :
+    
+    tmp = graph[nextpos][0]
+    graph[nextpos][0] = 'x'
+
+    x = int(pos[1])
+    y = int(pos[0])
+
+    xmax = 0
+    ymax = 0
+    for ii in graph.keys():
+        xx = int(ii[1])
+        yy = int(ii[0])
+        xmax  = max(xmax , xx)
+        ymax  = max(ymax , yy) 
+
+    if y != 0 :
+        xy1  = str(y-1) + str(x)
+        xy1 = graph[xy1][0]
+    else :
+        xy1 = "x"
+    
+    if y != ymax :
+        xy2  = str(y+1) + str(x)
+        xy2 = graph[xy2][0]
+    else :
+        xy2 = "x"
+    
+    if x != 0 :
+        xy3  = str(y) + str(x-1)
+        xy3 = graph[xy3][0]
+    else :
+        xy3 = "x"
+    
+    if x != xmax :
+        xy4  = str(y) + str(x+1)
+        xy4 = graph[xy4][0]
+    else :
+        xy4 = "x"
+    
+    graph[nextpos][0] = tmp
+    if xy1 != "x" or xy2 != "x" or xy3 != "x" or xy4 != "x"  :
+        return False
+    
+    return True
