@@ -7,8 +7,23 @@ def isDeadlock(butter,robot, search ,direction , graph  , butters = [] ):
         
         robotsNewPlace = placeRobot(direction , butter)
 
-        if len(robotsNewPlace) >= 3 :
+
+        if len(robotsNewPlace) >= 3  :
             return True
+
+        xmax = 0
+        ymax = 0
+        for ii in graph.keys():
+            xx = int(ii[1])
+            yy = int(ii[0])
+            xmax  = max(xmax , xx)
+            ymax  = max(ymax , yy)
+        ry = int(robotsNewPlace[0])
+        rx = int(robotsNewPlace[1])
+
+        if rx > xmax or ry > ymax or rx < 0 or ry < 0 :
+            return True
+    
 
         if(checktwobefor(graph ,robotsNewPlace, butters)):
 
@@ -18,15 +33,7 @@ def isDeadlock(butter,robot, search ,direction , graph  , butters = [] ):
                 else:
                     return True
 
-            elif search == "bidirectional":
-                # if(Bidirectional_Search.BidirectionalSearch( graph , robot , robotsNewPlace , True , None , butters , butter , goal)):
-                if(Astar.a_star( graph , robot , robotsNewPlace , True , None , butters , butter )):
-                    return False
-                else:
-                    return True
-                    # return False
-
-            elif search =="astar":
+            elif search =="astar" or search == "bidirectional":
                 if(Astar.a_star( graph , robot , robotsNewPlace , True , None , butters , butter )):
                     return False
                 else:
@@ -37,63 +44,27 @@ def isDeadlock(butter,robot, search ,direction , graph  , butters = [] ):
             return True
 
 
-# def deadlock(graph , currentpos, nextpos , parentpos , search):
-
-#     cx = int(currentpos[1])
-#     cy = int(currentpos[0])
-#     ny = int(nextpos[0])
-#     nx = int(nextpos[1])
-#     rx = -1
-#     ry = -1
-
-#     if cy == ny : 
-#         ry = cy
-#         if nx - cx > 0 :
-#             rx = cx - 1
-#         else :
-#             rx = cx + 1
-#     elif cx == nx : 
-#         rx = cx
-#         if ny - cy > 0 :
-#             ry = cy - 1
-#         else :
-#             ry = cy + 1
-
-#     robotpos = str(ry) + str(rx)
-
-#     checkresult = checktwobefor(graph , robotpos , currentpos )
-
-#     if parentpos is not None :
-        
-#         if(search == "ids"):
-#             checkpath = ids.iterativeDeepening(graph,parentpos , robotpos, 20)
-#             # Non
-
-#         elif search == "bidirectional":
-#             checkpath = Bidirectional_Search.BidirectionalSearch(graph , parentpos , robotpos   , True)
-
-#         elif search =="astar":
-
-#             checkpath = Astar.a_star(graph , parentpos , robotpos   , True , "13")
-
-        
-#     else :
-#         checkpath = True
-    
-
-#     return checkresult and ( checkpath is not False)
-
 
     
-def deadlockbd(graph , currentpos, nextpos ,parentpos, butters = [] , goal=None ):
+def deadlockbd(graph , currentpos, nextpos ,parentpos, butters = []  ):
 
-    cx = int(currentpos[1])
+
+    xmax = 0
+    ymax = 0
+    for ii in graph.keys():
+        xx = int(ii[1])
+        yy = int(ii[0])
+        xmax  = max(xmax , xx)
+        ymax  = max(ymax , yy)
+
+
     cy = int(currentpos[0])
+    cx = int(currentpos[1])
     ny = int(nextpos[0])
     nx = int(nextpos[1])
-    if parentpos is not None :
-        px = int(nextpos[1])
-        py = int(nextpos[0])
+    py = int(parentpos[0])
+    px = int(parentpos[1])
+
     
     rx = -1
     ry = -1
@@ -114,45 +85,48 @@ def deadlockbd(graph , currentpos, nextpos ,parentpos, butters = [] , goal=None 
         else :
             ry = ny - 1
 
-    if parentpos is not None :
-        if cy == py : 
-            rny = cy
-            if px - cx > 0 :
-                rnx = cx - 1
-            else :
-                rnx = cx + 1
-        elif cx == px : 
-            rnx = cx
-            if py - cy > 0 :
-                rny = cy - 1
-            else :
-                rny = cy + 1
+    if cy == py : 
+        rny = cy
+        if cx - px > 0 :
+            rnx = cx + 1
+        else :
+            rnx = cx - 1
+    elif cx == px : 
+        rnx = cx
+        if cy - py > 0 :
+            rny = cy + 1
+        else :
+            rny = cy - 1
 
-    robotnewpos = "12"
-    parentpos  = None
+
+    if rx > xmax or rnx > xmax or rx < 0 or rnx < 0 :
+        return True
+    
+    if ry > ymax or rny > ymax or ry < 0 or rny < 0 :
+        return True
+
+
     robotpos = str(ry) + str(rx)
-    # robotnewpos = str(rny) + str(rnx)
+    robotnewpos = str(rny) + str(rnx)
 
-    if len(robotpos) >= 3 or (len(robotnewpos) >= 3 and parentpos is not None):
-            return True
+    # if len(robotpos) >= 3 or (len(robotnewpos) >= 3 ):
+    #         return True
 
     checkresult = checktwobefor(graph , robotpos , butters)
     if checkresult is False :
         return True
 
-    if parentpos is None :
-        return False
 
-    # checkresult = checktwobefor(graph , robotnewpos , butters)
-    # if checkresult is False :
-    #     return True
+    checkresult = checktwobefor(graph , robotnewpos , butters)
+    if checkresult is False :
+        return True
 
     
         
-    # if(Astar.a_star(graph , robotpos , robotnewpos  , True ,None , butters ,currentpos ,goal ) ) :
-    #     return False
-    # else:
-    #     return True
+    if(Astar.a_star(graph , robotpos , robotnewpos  , True ,None , butters ,nextpos ) ) :
+        return False
+    else:
+        return True
 
     
 
