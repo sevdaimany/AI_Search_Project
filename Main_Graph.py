@@ -35,18 +35,18 @@ depth = 0
 # 1	1	2p	1	1"""
 
 
-myinput = """5	5
-1	1	1	1	1
-2	x	1b	1r	1
-2p	x	1	1	1
-2	1	2	1	1
-1	1	1	1	1"""
+# myinput = """5	5
+# 1	1	1	1	1
+# 2	x	1b	1r	1
+# 2p	x	1	1	1
+# 2	1	2	1	1
+# 1	1	1	1	1"""
 
-# address = "test5.txt"
-# with open(address) as reader :
-#     # print(reader.read())
-#     myinput = reader.read()
-# # print(myinput)
+address = "test3.txt"
+with open(address) as reader :
+    # print(reader.read())
+    myinput = reader.read()
+# print(myinput)
 
 buf = io.StringIO(myinput)
 n , m = map(int ,buf.readlines(1)[0].replace("\t" , " ").replace("\n" , "").split(" "))
@@ -138,6 +138,8 @@ def main():
     GRAPH = copy.deepcopy(mygraph)
     butterPaths =[]
     robotPaths = []
+    depth = [0 for i in range(len(butters))]
+    costs = [0 for i in range(len(butters))]
     for i in range(len(butters)):
         if i > 0:
             robotPos = butterPaths[i-1][-2]
@@ -145,7 +147,9 @@ def main():
             robotPos = robot
         search = "ids"
         if search == "ids":
-            (q, depth) = ids.iterativeDeepening(mygraph , butters[i] , goal[i] ,20,robot=robotPos)
+            (q, d) = ids.iterativeDeepening(mygraph , butters[i] , goal[i] ,20,robot=robotPos)
+            depth[i] = d
+            costs[i] = d
             if q == None :
                 success = False
             
@@ -160,12 +164,11 @@ def main():
             robotPaths.append(findRobotPaths(robotPos , q , search , i))
         print(butterPaths)
         print(robotPaths)
-        cost = 0
     return get_json_result({
         "graph" : GRAPH,
         "pathButters" : butterPaths,
         "pathsRobot" :robotPaths,
-        "cost" :cost,
+        "cost" :costs,
         "depth" : depth,
         "success" : success},
         )
