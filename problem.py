@@ -13,7 +13,8 @@ def isDeadlock(butter,robot, search ,direction , graph  , butters = [] ):
         if(checktwobefor(graph ,robotsNewPlace, butters)):
 
             if(search == "ids"):
-                if(ids.iterativeDeepening(graph,robot , robotsNewPlace, 20)):
+                (q, d) =ids.iterativeDeepening(graph,robot , robotsNewPlace, 20);
+                if(q):
                     return False
                 else:
                     return True
