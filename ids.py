@@ -1,5 +1,4 @@
 import problem
-# from state import State
 def iterativeDeepening(graph , start , goal,length, robot = None ):
     depth = 0
     result = None

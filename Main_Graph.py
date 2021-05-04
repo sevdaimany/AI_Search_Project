@@ -135,7 +135,6 @@ for i in range(n):
 @eel.expose
 def main():
     success = True 
-    # init()
     GRAPH = copy.deepcopy(mygraph)
     butterPaths =[]
     robotPaths = []
@@ -181,11 +180,6 @@ def whereRobotGo(first ,second):
     direction = problem.whichDirection(first,second)
     return problem.placeRobot(direction , first)
 
-# def init():
-#     State.setRobot(robot)
-#     for i in range(len(butters)):
-#         State.setButter(i , butters[i])
-
 
 
 def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
@@ -193,7 +187,6 @@ def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
     robotCoordinate  = firstRobotCoordinate
     for i in range(len(pathButter)-1):
         coordinate = whereRobotGo(pathButter[i] , pathButter[i+1])
-        # State.setButter(whichButter , pathButter[i])
         tmp = mygraph[pathButter[i]][0]
         mygraph[pathButter[i]][0] = 'x'
         if(search == "ids"):

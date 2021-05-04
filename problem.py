@@ -1,6 +1,5 @@
 import ids  , Astar 
 import Bidirectional_Search
-# from state import State
 
 
 ## this function check if next state for butter is deadlock or not 
