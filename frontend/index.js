@@ -4,7 +4,6 @@ const {world} = engine;
 let render;
 let runner;
 let robot;
-// let butter;
 let butters = [];
 const unitLengthX = 110;
 const unitLengthY = 110;
@@ -126,39 +125,30 @@ function randomPic () {
   else if (rand === 4) return './images/taco.png';
 }
 
-// function showResults (pathButter, pathsRobot) {
-//   let index = 0;
-//   let id = setInterval (function () {
-//     setRobotNewPosition(pathsRobot , index);
-//     if (index === pathButter.length - 1) {
-//       clearInterval (id);
-//     }
-//     let key = pathButter[index];
-//     let indexRow = parseInt (key.charAt (0));
-//     let indexColumn = parseInt (key.charAt (1));
-//     Body.setPosition (
-//       butter,
-//       {x: (indexColumn + 0.5) * unitLengthX, y: (indexRow + 0.5) * unitLengthY},
-//       {x: 0, y: 0.5}
-//     );
-//     index++;
-//   }, 2500);
-// }
+function alertMessage (depths) {
+  let message = 'depths :';
+  for (let i = 0; i < depths.length; i++) {
+    message += depths[i];
+    message += "  ";
+  }
+  return message;
+}
 
-//////////////////////////////////////////////////////////////////////
-function showResults (pathButters, pathsRobot) {
+function showResults (pathButters, pathsRobot, depths) {
   let numButter = 0;
   let levelRobot = 0;
-  // for(let numButter = 0 ; numButter < pathButters.length ; numButter++){
-  // for(let levelRobot = 0 ; levelRobot < pathsRobot[numButter].length ; levelRobot ++){
+  let check = true;
   let index = 0;
   let id = setInterval (function () {
+    index++;
     if (
-      numButter === pathButters.length &&
-      levelRobot === pathsRobot[numButter].length &&
-      index === pathsRobot[numButter][levelRobot].length
+      numButter === pathButters.length - 1 &&
+      levelRobot === pathsRobot[numButter].length - 1
+      // index === pathsRobot[numButter][levelRobot].length
     ) {
+      check = false;
       clearInterval (id);
+      alert (alertMessage(depths));
     }
     if (levelRobot === pathsRobot[numButter].length) {
       numButter++;
@@ -167,14 +157,26 @@ function showResults (pathButters, pathsRobot) {
     if (index === pathsRobot[numButter][levelRobot].length) {
       levelRobot++;
       index = 0;
-      // clearInterval (id);
     }
-    if (index === 0) {
-      let key = pathButters[numButter][levelRobot];
+    if (check) {
+      if (index === 0) {
+        let key = pathButters[numButter][levelRobot];
+        let indexRow = parseInt (key.charAt (0));
+        let indexColumn = parseInt (key.charAt (1));
+        Body.setPosition (
+          butters[numButter],
+          {
+            x: (indexColumn + 0.5) * unitLengthX,
+            y: (indexRow + 0.5) * unitLengthY,
+          },
+          {x: 0, y: 0.5}
+        );
+      }
+      let key = pathsRobot[numButter][levelRobot][index];
       let indexRow = parseInt (key.charAt (0));
       let indexColumn = parseInt (key.charAt (1));
       Body.setPosition (
-        butters[numButter],
+        robot,
         {
           x: (indexColumn + 0.5) * unitLengthX,
           y: (indexRow + 0.5) * unitLengthY,
@@ -182,38 +184,8 @@ function showResults (pathButters, pathsRobot) {
         {x: 0, y: 0.5}
       );
     }
-    let key = pathsRobot[numButter][levelRobot][index];
-    console.log (key);
-    let indexRow = parseInt (key.charAt (0));
-    let indexColumn = parseInt (key.charAt (1));
-    Body.setPosition (
-      robot,
-      {x: (indexColumn + 0.5) * unitLengthX, y: (indexRow + 0.5) * unitLengthY},
-      {x: 0, y: 0.5}
-    );
-    index++;
   }, 300);
 }
-// }
-// }
-
-// function setRobotNewPosition(pathsRobot,indexRobot){
-//   let index = 0;
-//   let id = setInterval (function () {
-//     if (index === pathsRobot[indexRobot].length - 1) {
-//       clearInterval (id);
-//     }
-//     let key = pathsRobot[indexRobot][index];
-//     let indexRow = parseInt (key.charAt (0));
-//     let indexColumn = parseInt (key.charAt (1));
-//     Body.setPosition (
-//       robot,
-//       {x: (indexColumn + 0.5) * unitLengthX, y: (indexRow + 0.5) * unitLengthY},
-//       {x: 0, y: 0.5}
-//     );
-//     index++;
-//   }, 500);
-// }
 async function run () {
   let resultsJSON = await eel.main () ();
   let result = JSON.parse (resultsJSON);
@@ -221,7 +193,7 @@ async function run () {
   if (result['success'] === false) {
     alert ("Can't pass the butter");
   } else {
-    showResults (result['pathButters'], result['pathsRobot']);
+    showResults (result['pathButters'], result['pathsRobot'], result['depth']);
   }
 }
 
