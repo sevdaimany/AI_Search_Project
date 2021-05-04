@@ -8,9 +8,9 @@ let butters = [];
 const unitLengthX = 110;
 const unitLengthY = 110;
 
-function table (graph) {
-  const cellsHorizontal = 6;
-  const cellsVertical = 5;
+function table (graph , horizontal , vertical) {
+  const cellsHorizontal = horizontal;
+  const cellsVertical = vertical;
   const width = cellsHorizontal * 110;
   const height = cellsVertical * 110;
 
@@ -196,7 +196,7 @@ function showResults (pathButters, pathsRobot, depths ,costs) {
 async function run () {
   let resultsJSON = await eel.main () ();
   let result = JSON.parse (resultsJSON);
-  table (result['graph']);
+  table (result['graph'] , result['width'] , result['height']);
   if (result['success'] === false) {
     alert ("Can't pass the butter");
   } else {

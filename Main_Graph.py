@@ -27,12 +27,12 @@ depth = 0
 # 2	1	1	1	1	2
 # 1	x	x	x	1	1p"""
 
-# myinput = """5	5
-# 1	1	1r	1	x
-# 2	1	1b	x	x
-# 1	1	1	1	x
-# 2	2	x	1	1
-# 1	1	2p	1	1"""
+myinput = """5	5
+1	1	1r	1	x
+2	1	1b	x	x
+1	1	1	1	x
+2	2	x	1	1
+1	1	2p	1	1"""
 
 
 # myinput = """5	5
@@ -42,11 +42,11 @@ depth = 0
 # 2	1	2	1	1
 # 1	1	1	1	1"""
 
-address = "test3.txt"
-with open(address) as reader :
-    # print(reader.read())
-    myinput = reader.read()
-# print(myinput)
+# address = "test3.txt"
+# with open(address) as reader :
+#     # print(reader.read())
+#     myinput = reader.read()
+# # print(myinput)
 
 buf = io.StringIO(myinput)
 n , m = map(int ,buf.readlines(1)[0].replace("\t" , " ").replace("\n" , "").split(" "))
@@ -170,7 +170,10 @@ def main():
         "pathsRobot" :robotPaths,
         "cost" :costs,
         "depth" : depth,
-        "success" : success},
+        "success" : success,
+        "width" : m,
+        "height" : n,
+        },
         )
     
 
