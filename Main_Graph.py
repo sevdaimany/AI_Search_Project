@@ -8,8 +8,8 @@ import problem
 
 import copy
 
-# eel.init("frontend")
-eel.init("C:\\Users\\rajab\\OneDrive\\Desktop\\Artificial Intelligence\\project\\git\\project1\\AI_Search_Project\\frontend")
+eel.init("frontend")
+# eel.init("C:\\Users\\rajab\\OneDrive\\Desktop\\Artificial Intelligence\\project\\git\\project1\\AI_Search_Project\\frontend")
 
 mynodes = list()
 mygraph = collections.defaultdict(list)
@@ -21,19 +21,19 @@ depth = 0
 
 
 
-myinput = """5	6
-1	1	1	1	x	1
-2	1	1b	1r	1b	2
-2p	x	1	1	1	2
-2	1	1	1	1	2
-1	x	x	x	1	1p"""
+# myinput = """5	6
+# 1	1	1	1	x	1
+# 2	1	1b	1r	1b	2
+# 2p	x	1	1	1	2
+# 2	1	1	1	1	2
+# 1	x	x	x	1	1p"""
 
-# myinput = """5	5
-# 1	1	1r	1	x
-# 2	1	1b	x	x
-# 1	1	1	1	x
-# 2	2	x	1	1
-# 1	1	2p	1	1"""
+myinput = """5	5
+1	1	1r	1	x
+2	1	1b	x	x
+1	1	1	1	x
+2	2	x	1	1
+1	1	2p	1	1"""
 
 
 # myinput = """5	5
@@ -43,7 +43,7 @@ myinput = """5	6
 # 2	1	2	1	1
 # 1	1	1	1	1"""
 
-# address = "test3.txt"
+# address = "test5.txt"
 # with open(address) as reader :
 #     # print(reader.read())
 #     myinput = reader.read()
@@ -114,21 +114,26 @@ for i in range(n):
 
 
 
+def init():
+    for i in range(len(butters)):
+        mygraph[butters[i]][0] = 'x'
 
 @eel.expose
 def main():
     success = True 
     GRAPH = copy.deepcopy(mygraph)
+    init()
     butterPaths =[]
     robotPaths = []
     depth = [0 for i in range(len(butters))]
     costs = [0 for i in range(len(butters))]
     for i in range(len(butters)):
+        mygraph[butters[i]][0] = "b"
         if i > 0:
             robotPos = butterPaths[i-1][-2]
         else:
             robotPos = robot
-        search = "bidirectional"
+        search = "ids"
         if search == "ids":
             (q, d) = ids.iterativeDeepening(mygraph , butters[i] , goal[i] ,20,robot=robotPos)
             depth[i] = d
@@ -136,7 +141,7 @@ def main():
             if q == None :
                 success = False
             
-            print(q)
+            # print(q)
         elif search == "bidirectional":
             
             (q , c , d) = Bidirectional_Search.BidirectionalSearch(mygraph , butters[i] , goal[i]  , False ,  robotPos   , None , None )
@@ -144,8 +149,8 @@ def main():
             costs[i] = c
             if q == None :
                 success = False
-            print("hhh")
-            print(q)
+            # print("hhh")
+            # print(q)
 
         elif search =="astar":
             
