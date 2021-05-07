@@ -17,8 +17,8 @@ robot =""
 goal = []
 butters = []
 depth = 0
-search = "ids"
-
+search = "astar"
+# search = "astar" or "ids" or "bidirectional"
 
 
 
