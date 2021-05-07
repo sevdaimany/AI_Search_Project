@@ -5,7 +5,6 @@ import eel
 import json
 import ids
 import problem
-
 import copy
 
 eel.init("frontend")
@@ -20,6 +19,12 @@ depth = 0
 search = "astar"
 # search = "astar" or "ids" or "bidirectional"
 
+address = "test4.txt"
+with open(address) as reader :
+    # print(reader.read())
+    myinput = reader.read()
+# print(myinput)
+
 
 
 
@@ -30,12 +35,12 @@ search = "astar"
 # 2	1	1	1	1	2
 # 1	x	x	x	1	1p"""
 
-myinput = """5	5
-1	1	1r	1	x
-2	1	1b	x	x
-1	1	1	1	x
-2	2	x	1	1
-1	1	2p	1	1"""
+# myinput = """5	5
+# 1	1	1r	1	x
+# 2	1	1b	x	x
+# 1	1	1	1	x
+# 2	2	x	1	1
+# 1	1	2p	1	1"""
 
 
 # myinput = """5	5
@@ -44,12 +49,6 @@ myinput = """5	5
 # 2p	x	1	1	1
 # 2	1	2	1	1
 # 1	1	1	1	1"""
-
-# address = "test5.txt"
-# with open(address) as reader :
-#     # print(reader.read())
-#     myinput = reader.read()
-# # print(myinput)
 
 buf = io.StringIO(myinput)
 n , m = map(int ,buf.readlines(1)[0].replace("\t" , " ").replace("\n" , "").split(" "))
