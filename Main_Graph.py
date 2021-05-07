@@ -17,6 +17,8 @@ robot =""
 goal = []
 butters = []
 depth = 0
+search = "ids"
+
 
 
 
@@ -133,7 +135,6 @@ def main():
             robotPos = butterPaths[i-1][-2]
         else:
             robotPos = robot
-        search = "ids"
         if search == "ids":
             (q, d) = ids.iterativeDeepening(mygraph , butters[i] , goal[i] ,20,robot=robotPos)
             depth[i] = d
