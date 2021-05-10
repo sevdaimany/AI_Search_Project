@@ -20,9 +20,9 @@ def depthLimited(graph , start , goal, depth, stack ,visited = None , robot = No
         return None 
     
     if visited is None:
-        visited = set()
+        visited = []
 
-    visited.add(start)
+    visited.append(start)
     for next in graph.get(start):
         if type(next) == tuple: 
             if (not next[0] in visited )and (problem.checkAvailable(graph , next[0], start , robot)):
@@ -43,6 +43,7 @@ def depthLimited(graph , start , goal, depth, stack ,visited = None , robot = No
                 
     depth +=1
     stack.pop()
+    visited.pop()
 
 
 
