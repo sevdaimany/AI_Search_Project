@@ -16,10 +16,10 @@ robot =""
 goal = []
 butters = []
 depth = 0
-search = "astar"
+search = "ids"
 # search = "astar" or "ids" or "bidirectional"
 
-address = "test4.txt"
+address = "test3.txt"
 with open(address) as reader :
     # print(reader.read())
     myinput = reader.read()
@@ -37,10 +37,10 @@ with open(address) as reader :
 
 # myinput = """5	5
 # 1	1	1r	1	x
-# 2	1	1b	x	x
-# 1	1	1	1	x
-# 2	2	x	1	1
-# 1	1	2p	1	1"""
+# 2	1	1b	1	1
+# 1	x	x	1	x
+# 2	1p	1	1	1
+# x	x	1	1	1"""
 
 
 # myinput = """5	5
@@ -196,7 +196,7 @@ def findRobotPaths(firstRobotCoordinate ,pathButter, search, whichButter):
         tmp = mygraph[pathButter[i]][0]
         mygraph[pathButter[i]][0] = 'x'
         if(search == "ids"):
-            (robotPath,e) = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,20)
+            (robotPath,e) = ids.iterativeDeepening(mygraph , robotCoordinate , coordinate ,30)
 
         elif search == "bidirectional":
             (robotPath , c , d) = Astar.a_star(mygraph , robotCoordinate , coordinate  , True ,  None   , None , None )
